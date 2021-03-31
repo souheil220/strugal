@@ -2,14 +2,11 @@ FROM python:3.7-alpine
 
 ENV PYTHONUNBUFFERED 1
 
-COPY ./requirements.txt requirements.txt
-RUN pip install -r /requirements.txt
-
-RUN mkdir /strugal 
 WORKDIR /strugal
 
-COPY ./strugal /strugal
+COPY . .
 
-RUN adduser -D user
+RUN pip install -r requirements.txt
 
-USER user
+
+
