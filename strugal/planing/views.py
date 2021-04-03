@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from.models import ProductionPlan
 
 def planing(request):
-    pass
+    return render(request,"planing/index.html")
+    # return render(request,"planing/ess.html")
