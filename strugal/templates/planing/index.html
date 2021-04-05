@@ -33,6 +33,7 @@
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
       crossorigin="anonymous"
     ></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
@@ -45,58 +46,10 @@
     <meta charset="utf-8" />
     <link href="{% static 'css/main.css' %}" rel="stylesheet" />
     <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/jquery.formset.js' %}"></script>
-
-    <script>
-      var colors = ["red", "black", "purple"];
-      var i = 0;
-
-      document.addEventListener("DOMContentLoaded", function () {
-        var calendarEl = document.getElementById("calendar");
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: "dayGridWeek",
-          locale: "fr",
-          themeSystem: "bootstrap",
-          selectable: true,
-          select: function (arg) {
-            $("#inquiryModal").modal("show");
-            var totalForm = parseInt($("#id_form-TOTAL_FORMS")[0].defaultValue);
-            $("#inquiryModal").submit(function (event) {
-              var value;
-              for (var j = 0; j < totalForm; j++) {
-                console.log(j);
-                value = $("#id_form-" + j.toString() + "-ref").val();
-                console.log(value);
-                if (value) {
-                  if (i >= colors.length) {
-                    i = 0;
-                  } else {
-                    i++;
-                  }
-
-                  // console.log(arg.startStr);
-                  calendar.addEvent({
-                    title: value,
-                    start: arg.start,
-                    end: arg.end,
-                    allDay: arg.allDay,
-                    color: colors[i],
-                  });
-                }
-                $("#id_form-" + j.toString() + "-ref").val("");
-              }
-              console.log(value);
-              event.preventDefault();
-              $("#inquiryModal").modal("hide");
-            });
-            calendar.unselect();
-          },
-        });
-        calendar.render();
-      });
-    </script>
+    <script src="{% static 'js/calender.js' %}"></script>
   </head>
   <body>
+    <input value="1" hidden />
     <div id="calendar"></div>
     <div
       style="height: 50px; background: red; max-width: 1100px; margin: auto"
@@ -110,45 +63,20 @@
               <span>&times;</span>
             </button>
           </div>
+
           <div class="modal-body">
             <form method="POST" enctype="multipart/form-data" id="myForm">
               {% csrf_token %}
-              <!-- <input type="hidden" name="realtor_email" />
-              <input type="hidden" name="listing_id" />
-              <input type="hidden" name="listing_slug" />
-              <div class="form-group">
-                <label for="property_name" class="col-form-label"
-                  >Property:</label
-                >
-                <input type="text" name="listing" class="form-control" />
+              <div id="empty_form">
+                {{ProductFormset.as_p}}
+                <button type="button" class="btn btn-link">Add Field</button>
               </div>
-              <div class="form-group">
-                <label for="name" class="col-form-label">Name:</label>
-                <input
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  value=""
-                  required
-                />
+              <div>
+                <button id="add_more" type="button" class="btn btn-link">
+                  Add Product
+                </button>
               </div>
-              <div class="form-group">
-                <label for="email" class="col-form-label">Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  class="form-control"
-                  value=""
-                  required
-                />
-              </div>
-              <label for="phone" class="col-form-label">Phone:</label>
-              <div class="form-group"></div>
-              <input type="text" name="phone" class="form-control" />
-              <label for="message" class="col-form-label">Message:</label>
-              <div class="form-group"></div>
-              <textarea name="message" class="form-control"></textarea> -->
-              <div>{{ProductFormset.as_p}}</div>
+
               <input
                 type="submit"
                 value="Send"
@@ -160,13 +88,23 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      $(function () {
-        $("#myForm div").formset({
-          addText: "add another product",
-        });
-        $("#myForm p").formset({
-          addText: "add another field",
+    <script src="{% static 'js/newProduct.js' %}"></script>
+    <script>
+      $("#myForm").submit(function (e) {
+        e.preventDefault();
+
+        $form = $(this);
+        var formData = new FormData(this);
+        $.ajax({
+          url: "/planing/",
+          type: "POST",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            console.log("Coucou");
+          },
         });
       });
     </script>
