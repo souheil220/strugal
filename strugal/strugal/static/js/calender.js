@@ -1,59 +1,70 @@
-var colors = ["red", "black", "purple"];
-var i = 0;
+//alert(productval)
+$("#calendar").fullCalendar({
+  defaultView: "basicWeek",
+  displayEventTime: false,
+  // events: productval, //produit('{{product}}'),
+  events: {
+    url: "/planing/events"
+  },
 
-document.addEventListener("DOMContentLoaded", function () {
-  var calendarEl = document.getElementById("calendar");
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: "dayGridWeek",
-    locale: "fr",
-    themeSystem: "bootstrap",
-    selectable: true,
-    eventDisplay: 'block',
+  dayClick: function (date, jsEvent, view) {
 
-    select: function (arg) {
-      $("#inquiryModal").modal("show");
-      $("#inquiryModal").submit(function (event) {
-        var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
-        var value, qte, long;
-        for (var j = 0; j < totalForm; j++) {
+    $("#inquiryModal").modal("show");
+    $("#jour").val(date),
+      $('#id_form-0-date_created').val($("#jour").val())
+    $("#inquiryModal").submit(function () {
+      var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
+      var ref, qte;
+      for (var j = 0; j < totalForm; j++) {
+        ref = $("#id_form-" + j.toString() + "-ref").val();
+        qte = $("#id_form-" + j.toString() + "-qte").val();
 
-          value = $("#id_form-" + j.toString() + "-ref").val();
-          qte = $("#id_form-" + j.toString() + "-qte").val();
-          long = $("#id_form-" + j.toString() + "-longueur").val();
-
-          if (value && qte && long) {
-            if (i >= colors.length) {
-              i = 0;
-            } else {
-              i++;
-            }
-
-            var test = calendar. value + "\n" + qte + "\n" + long
-           
-
-
-            // console.log(arg.startStr);
-            calendar.addEvent({
-              title: test,
-              start: arg.start,
-              end: arg.end,
-              allDay: arg.allDay,
-              color: colors[i],
-            });
-
-
-          }
-
-
+        if (ref && qte) {
+          $("#calendar").fullCalendar(
+              "renderEvent", {
+                title: ref + "\n" + qte,
+                start: $("#jour").val(),
+                end: $("#jour").val(),
+              },
+              !0
+            ),
+            $;
           $("#id_form-" + j.toString() + "-ref").val("");
           $("#id_form-" + j.toString() + "-qte").val("");
-          $("#id_form-" + j.toString() + "-longueur").val("");
+
         }
-        //event.preventDefault();
         $("#inquiryModal").modal("hide");
-      });
-      calendar.unselect();
-    },
+        $(".fc-content .fc-time").remove();
+      }
+    });
+  },
+});
+
+// [{
+//   'id': 1,
+//   'ref': 'd',
+//   'qte': 4654.0,
+//   'date_created': 'Wed Apr 07 2021 00:00:00 GMT+0000'
+// }, {
+//   'id': 2,
+//   'ref': 'this is a test',
+//   'qte': 123456.0,
+//   'date_created': 'Sat Apr 10 2021 00:00:00 GMT+0000'
+// }, {
+//   'id': 3,
+//   'ref': 'Please work',
+//   'qte': 951357.0,
+//   'date_created': 'Sat Apr 10 2021 00:00:00 GMT+0000'
+// }]
+
+$('.fc-button').click(function () {
+  $.ajax({
+    url: "/planing/events",
+    type: "GET",
+    success: function (res) {
+      console.log(res);
+      // alert(res);
+    }
   });
-  calendar.render();
+  console.log('yo')
 });
