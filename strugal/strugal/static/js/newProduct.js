@@ -35,8 +35,11 @@ $("#add_more").click(function () {
     parseInt(form_idx).toString() +
     `-qte"
         />
-      </div>
-      <input type="hidden" name="form-` +
+        </div>
+        <div class="closeButton" id='test'><div class='remove' id='remove_` +
+    parseInt(form_idx).toString() +
+    `'>&times;</div></div>
+        <input type="hidden" name="form-` +
     parseInt(form_idx).toString() +
     `-date_created" id="id_form-` +
     parseInt(form_idx).toString() +
@@ -50,17 +53,12 @@ $("#add_more").click(function () {
   $("#id_form-TOTAL_FORMS").val(parseInt(form_idx) + 1);
 });
 
+$('#empty_form').on('click', '.remove', function () {
+  console.log(this.id)
+  var id = this.id;
+  var split_id = id.split("_");
+  var deleteindex = split_id[1];
 
-$("#removeit").click(function () {
-  var form_idx = $("#id_form-TOTAL_FORMS").val();
-  if (parseInt(form_idx) > 1) {
-    $(`#div-num-` + (parseInt(form_idx) - 1).toString()).remove();
-    $("#id_form-TOTAL_FORMS").val(parseInt(form_idx) - 1);
-    if (parseInt($("#id_form-TOTAL_FORMS").val()) <= 1) {
-      $("#removeit").attr('disabled', true);
-    }
-  } else {
-    $("#removeit").attr('disabled', true);
-  }
-
-})
+  // Remove <div> with id
+  $("#div-num-" + deleteindex).remove();
+});

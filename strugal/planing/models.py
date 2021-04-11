@@ -8,4 +8,4 @@ class ProductionPlan(models.Model):
     date_created = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return self.ref
+        return "{} {} {}".format(self.ref, self.qte, self.date_created)

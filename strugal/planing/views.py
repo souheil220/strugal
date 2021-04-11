@@ -10,10 +10,19 @@ def events(request):
     if request.method == 'GET':
         parametre = request.GET
         debut = parametre.get('start')
-        print(debut)
-        # fin = parametre['end']
-        evenement = ProductionPlan.objects.filter(date_created=debut)
-        return HttpResponse(evenement)
+        fin = parametre.get('end')
+
+        evenement = ProductionPlan.objects.filter(date_created__gte=debut,
+                                                  date_created__lte=fin)
+        event_arr = []
+        for i in evenement:
+            event_sub_arr = {}
+            event_sub_arr['title'] = i.ref + "\n" + str(i.qte)
+            event_sub_arr['start'] = i.date_created
+            event_sub_arr['end'] = i.date_created
+            event_arr.append(event_sub_arr)
+        print(event_arr)
+        return HttpResponse(json.dumps(event_arr))
 
 
 def planing(request):
@@ -28,8 +37,8 @@ def planing(request):
         if formset.is_valid():
             print('valid')
             for form in formset:
-                # instance = form.save(commit=False)
-                # instance.save()
+                instance = form.save(commit=False)
+                instance.save()
                 print(form.cleaned_data)
             # formset.save()
 
@@ -37,7 +46,6 @@ def planing(request):
             print(formset.errors)
             print('not valid')
         return HttpResponse('Hola')
-
     return render(
         request, "planing/index.html", {
             'formset': formset,

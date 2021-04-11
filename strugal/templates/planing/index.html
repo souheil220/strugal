@@ -2,21 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-        font-size: 14px;
-      }
-
-      #calendar {
-        max-width: 1100px;
-        margin: auto;
-      }
-    </style>
-
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -49,16 +34,55 @@
       href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="{% static 'css/test.css' %}" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+        font-size: 14px;
+      }
+
+      #calendar {
+        max-width: 900px;
+        margin: 40px auto;
+      }
+      .fc-event {
+        font-size: 1.5em;
+      }
+      .vl {
+        border-left: 6px solid green;
+        height: 100%;
+      }
+    </style>
 
     <meta charset="utf-8" />
-    <meta id="my-data" data-name="{{product}}" />
   </head>
   <body>
     <!-- <input type="text" value="{{product}}" hidden /> -->
     <div id="calendar"></div>
-    <div
-      style="height: 50px; background: red; max-width: 1100px; margin: auto"
-    ></div>
+    <div style="height: 40px; background: red; max-width: 1100px; margin: auto">
+      <table style="width: 100%; height: 100%; border: 3px red double">
+        <thead>
+          <tr>
+            <th class="fc-day-header fc-widget-header fc-sun">Sun 4/4</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-mon">Mon 4/5</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-tue">Tue 4/6</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-wed">Wed 4/7</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-thu">Thu 4/8</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-fri">Fri 4/9</th>
+            <th class="vl"></th>
+            <th class="fc-day-header fc-widget-header fc-sat">Sat 4/10</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
     <div class="modal fade" id="inquiryModal" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -122,6 +146,7 @@
                       id="id_form-0-qte"
                     />
                   </div>
+                  <!-- <div class="closeButton" id="test">&times;</div> -->
                   <input
                     type="hidden"
                     name="form-0-date_created"
@@ -132,14 +157,6 @@
               <div style="margin: 5px">
                 <button id="add_more" type="button" class="btn btn-primary">
                   Add Product
-                </button>
-                <button
-                  id="removeit"
-                  type="button"
-                  class="btn btn-danger"
-                  disabled
-                >
-                  Annuler
                 </button>
               </div>
 
@@ -155,10 +172,6 @@
         </div>
       </div>
     </div>
-    <script>
-      var productval = {{ product|safe }};
-
-    </script>
     <script src="{% static 'js/newProduct.js' %}"></script>
     <script src="{% static 'js/calender.js' %}"></script>
     <script>

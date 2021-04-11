@@ -1,0 +1,19 @@
+.closeButton {
+    /* background-color: #f00; */
+    /* border: 3px solid #999; */
+    color: red;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    /* top: 50px; */
+    right: -5px;
+    font-size: 25px;
+    line-height: 5px;
+    width: 34px;
+    /* height: 30px; */
+    /* text-align: center; */
+   
+}
