@@ -86,92 +86,64 @@
     <div class="modal fade" id="inquiryModal" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="inquiryModalLabel">
-              Ajouter Produit(s)
-            </h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form method="POST" enctype="multipart/form-data" id="myForm">
-              {% csrf_token %}
-              <div id="empty_form">
-                <input
-                  type="hidden"
-                  name="form-TOTAL_FORMS"
-                  value="1"
-                  id="id_form-TOTAL_FORMS"
-                /><input
-                  type="hidden"
-                  name="form-INITIAL_FORMS"
-                  value="0"
-                  id="id_form-INITIAL_FORMS"
-                /><input
-                  type="hidden"
-                  name="form-MIN_NUM_FORMS"
-                  value="0"
-                  id="id_form-MIN_NUM_FORMS"
-                /><input
-                  type="hidden"
-                  name="form-MAX_NUM_FORMS"
-                  value="1000"
-                  id="id_form-MAX_NUM_FORMS"
-                />
-
-                <div>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Ref</span>
-                    </div>
-                    <input
-                      type="text"
-                      name="form-0-ref"
-                      class="form-control"
-                      required="true"
-                      maxlength="255"
-                      id="id_form-0-ref"
-                    />
-                  </div>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Qte</span>
-                    </div>
-                    <input
-                      type="number"
-                      name="form-0-qte"
-                      class="form-control"
-                      required="true"
-                      id="id_form-0-qte"
-                    />
-                  </div>
-                  <!-- <div class="closeButton" id="test">&times;</div> -->
-                  <input
-                    type="hidden"
-                    name="form-0-date_created"
-                    id="id_form-0-date_created"
-                  />
-                </div>
+              <div class="modal-header">
+              <h5 class="modal-title" id="inquiryModalLabel">
+                  Ajouter Produit(s)
+              </h5>
+              <button type="button" class="close" data-dismiss="modal">
+                  <span>&times;</span>
+              </button>
               </div>
-              <div style="margin: 5px">
-                <button id="add_more" type="button" class="btn btn-primary">
-                  Add Product
-                </button>
+              <div class="modal-body">
+                  <form method="POST" enctype="multipart/form-data" id="myForm">
+                      {% csrf_token %}
+                      <div id="empty_form">
+                          <div id='turningPoint' style="margin: 5px">
+                              <button id="add_more" type="button" class="btn btn-primary">
+                              Add Product
+                              </button>
+                          </div>
+                          <input
+                              type="submit"
+                              value="Send"
+                              class="btn btn-block btn-secondary"
+                          />
+                          <input id="jour" hidden />
+                          <hr />
+                      </div>
+                  </form>
               </div>
-
-              <input
-                type="submit"
-                value="Send"
-                class="btn btn-block btn-secondary"
-              />
-              <input id="jour" hidden />
-              <hr />
-            </form>
-          </div>
         </div>
       </div>
+  </div>
+
+  <div class="modal fade" id="updateModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier Produit</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="id" hidden />
+                <form method="POST" enctype="multipart/form-data" id="updateForm">
+                    {% csrf_token %}
+                    <div id="empty_form_update">
+                    <input id="sub_mod"
+                    type="submit"
+                    value="Send"
+                    class="btn btn-block btn-secondary"
+                    />
+                    <input id="day" hidden />
+                    <hr />
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+
     <script src="{% static 'js/newProduct.js' %}"></script>
     <script src="{% static 'js/calender.js' %}"></script>
     <script>
@@ -183,6 +155,27 @@
         console.log(formData);
         $.ajax({
           url: "/planing/",
+          type: "POST",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            console.log(formData);
+          },
+        });
+      });
+    </script>
+
+    <script>
+      $("#updateForm").submit(function (e) {
+        e.preventDefault();
+
+        $form = $(this);
+        var formData = new FormData(this);
+        console.log(formData);
+        $.ajax({
+          url: `/planing/update/${$("#id").val()}`,
           type: "POST",
           data: formData,
           cache: false,

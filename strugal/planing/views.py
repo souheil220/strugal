@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ProductFormset
 from .models import ProductionPlan
@@ -17,12 +17,30 @@ def events(request):
         event_arr = []
         for i in evenement:
             event_sub_arr = {}
+            event_sub_arr['id'] = i.id
             event_sub_arr['title'] = i.ref + "\n" + str(i.qte)
             event_sub_arr['start'] = i.date_created
             event_sub_arr['end'] = i.date_created
             event_arr.append(event_sub_arr)
-        print(event_arr)
+        print(type(event_arr))
         return HttpResponse(json.dumps(event_arr))
+
+
+def update(request, pk):
+    # form = ProductFormset(request.POST,
+    #                       queryset=ProductionPlan.objects.get(id=pk))
+    # print(form[-1])
+    if request.method == 'POST':
+        form = ProductFormset(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            #form = ProductFormset(request.POST,queryset=ProductionPlan.objects.get(id=pk))
+            #form.save()
+            elem = ProductionPlan.objects.get(id=int(pk))
+            elem.qte = int(form.cleaned_data[0]['qte'])
+            elem.ref = form.cleaned_data[0]['ref']
+            elem.save()
+            return render(request, "planing/index.html")
 
 
 def planing(request):
@@ -32,14 +50,13 @@ def planing(request):
     product = ProductionPlan.objects.values()
     list_result = [entry for entry in product]
 
-    # print formset data if it is valid
     if request.method == 'POST':
         if formset.is_valid():
-            print('valid')
+
             for form in formset:
                 instance = form.save(commit=False)
                 instance.save()
-                print(form.cleaned_data)
+
             # formset.save()
 
         else:

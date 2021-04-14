@@ -9,4 +9,4 @@ class ProductionPlan(models.Model):
 
     def __str__(self):
         # return "{} {} {}".format(self.ref, self.qte, self.date_created)
-        return "{} ".format(self.ref)
+        return "{} {} {} ".format(self.ref, self.qte, self.date_created)
