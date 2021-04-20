@@ -3,7 +3,7 @@ $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
-  events: "/planing/events",
+  events: "/planing/events4",
   header: {
     left: 'prev,next today',
     center: 'title',
@@ -56,6 +56,19 @@ $("#calendar").fullCalendar({
         />
     </div>
     <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Ral</span>
+    </div>
+    <input
+      type="text"
+      name="form-0-ral"
+      class="form-control"
+      required="true"
+      maxlength="255"
+      id="id_form-0-ral"
+    />
+</div>
+    <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text">Qte</span>
         </div>
@@ -66,6 +79,30 @@ $("#calendar").fullCalendar({
           required="true"
           id="id_form-0-qte"
         />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Qte</span>
+        </div>
+        <input
+          type="number"
+          name="form-0-qte"
+          class="form-control"
+          required="true"
+          id="id_form-0-qte"
+        />
+    </div>
+    <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Ral</span>
+            </div>
+            <input
+              type="number"
+              name="form-0-ral"
+              class="form-control"
+              required="true"
+              id="id_form-0-ral"
+            />
     </div>
     <button id="deleteProduct" type="button" class="btn btn-danger">
                   Spprimer Product
@@ -97,6 +134,7 @@ $("#calendar").fullCalendar({
       })
       $("#id_form-0-ref").val(test[0]);
       $("#id_form-0-qte").val(test[1]);
+      $("#id_form-0-ral").val(test[2]);
 
       console.log($("#id_form-0-ref").val())
       $("#day").val(today)
@@ -105,6 +143,7 @@ $("#calendar").fullCalendar({
       $("#updateModal").submit(function () {
         ref = $("#id_form-0-ref").val();
         qte = $("#id_form-0-qte").val();
+        qte = $("#id_form-0-ral").val();
 
         if (ref && qte) {
 
@@ -132,6 +171,7 @@ $("#calendar").fullCalendar({
 
     $("#id_form-0-ref").val("");
     $("#id_form-0-qte").val("");
+    $("#id_form-0-ral").val("");
     var today = aujourdhui()
 
     if (today <= date.format()) {
@@ -176,6 +216,19 @@ $("#calendar").fullCalendar({
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
+          <span class="input-group-text">Ral</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral"
+        />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
           <span class="input-group-text">Qte</span>
         </div>
         <input
@@ -203,6 +256,7 @@ $("#calendar").fullCalendar({
         for (var j = 0; j < totalForm; j++) {
           ref = $("#id_form-" + j.toString() + "-ref").val();
           qte = $("#id_form-" + j.toString() + "-qte").val();
+          qte = $("#id_form-" + j.toString() + "-ral").val();
 
           var goodToGo = true
 
@@ -213,6 +267,7 @@ $("#calendar").fullCalendar({
               event.preventDefault();
               ref = $("#id_form-" + j.toString() + "-ref").val("");
               qte = $("#id_form-" + j.toString() + "-qte").val("");
+              qte = $("#id_form-" + j.toString() + "-ral").val("");
             }
           })
 
@@ -230,6 +285,7 @@ $("#calendar").fullCalendar({
               $;
             $("#id_form-" + j.toString() + "-ref").val("");
             $("#id_form-" + j.toString() + "-qte").val("");
+            $("#id_form-" + j.toString() + "-ral").val("");
 
           }
           $("#inquiryModal").modal("hide");

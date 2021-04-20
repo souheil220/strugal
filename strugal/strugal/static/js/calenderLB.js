@@ -3,7 +3,7 @@ $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
-  events: "/planing/events",
+  events: "/planing/events2",
   header: {
     left: 'prev,next today',
     center: 'title',

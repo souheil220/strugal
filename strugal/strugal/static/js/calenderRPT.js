@@ -3,7 +3,7 @@ $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
-  events: "/planing/events",
+  events: "/planing/events3",
   header: {
     left: 'prev,next today',
     center: 'title',
@@ -44,15 +44,57 @@ $("#calendar").fullCalendar({
 <div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text">Ref</span>
+          <span class="input-group-text">Ref01</span>
         </div>
         <input
           type="text"
-          name="form-0-ref"
+          name="form-0-ref01"
           class="form-control"
           required="true"
           maxlength="255"
-          id="id_form-0-ref"
+          id="id_form-0-ref01"
+        />
+    </div>
+    <div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Ref02</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ref02"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ref02"
+        />
+    </div>
+    <div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Ral01</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral01"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral01"
+        />
+    </div>
+    <div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Ral02</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral02"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral02"
         />
     </div>
     <div class="input-group mb-3">
@@ -163,17 +205,56 @@ $("#calendar").fullCalendar({
 <div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text">Ref</span>
+          <span class="input-group-text">Ref01</span>
         </div>
         <input
           type="text"
-          name="form-0-ref"
+          name="form-0-ref01"
           class="form-control"
           required="true"
           maxlength="255"
-          id="id_form-0-ref"
+          id="id_form-0-ref01"
         />
     </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Ref02</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ref02"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ref02"
+        />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Ral01</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral01"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral01"
+        />
+    </div>
+    <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Ral02</span>
+    </div>
+    <input
+      type="text"
+      name="form-0-ral02"
+      class="form-control"
+      required="true"
+      maxlength="255"
+      id="id_form-0-ral02"
+    />
+</div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text">Qte</span>
@@ -201,7 +282,10 @@ $("#calendar").fullCalendar({
         var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
         var ref, qte;
         for (var j = 0; j < totalForm; j++) {
-          ref = $("#id_form-" + j.toString() + "-ref").val();
+          ref = $("#id_form-" + j.toString() + "-ref01").val();
+          ref = $("#id_form-" + j.toString() + "-ref02").val();
+          ref = $("#id_form-" + j.toString() + "-ral01").val();
+          ref = $("#id_form-" + j.toString() + "-ral02").val();
           qte = $("#id_form-" + j.toString() + "-qte").val();
 
           var goodToGo = true
@@ -211,7 +295,10 @@ $("#calendar").fullCalendar({
               goodToGo = false;
               alert('ref ' + e['title'] + ' already there')
               event.preventDefault();
-              ref = $("#id_form-" + j.toString() + "-ref").val("");
+              ref = $("#id_form-" + j.toString() + "-ref01").val("");
+              ref = $("#id_form-" + j.toString() + "-ref02").val("");
+              ref = $("#id_form-" + j.toString() + "-ral01").val("");
+              ref = $("#id_form-" + j.toString() + "-ral02").val("");
               qte = $("#id_form-" + j.toString() + "-qte").val("");
             }
           })
@@ -228,7 +315,10 @@ $("#calendar").fullCalendar({
                 !0
               ),
               $;
-            $("#id_form-" + j.toString() + "-ref").val("");
+            $("#id_form-" + j.toString() + "-ref01").val("");
+            $("#id_form-" + j.toString() + "-ref02").val("");
+            $("#id_form-" + j.toString() + "-ral01").val("");
+            $("#id_form-" + j.toString() + "-ral02").val("");
             $("#id_form-" + j.toString() + "-qte").val("");
 
           }

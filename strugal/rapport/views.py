@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from planing.models import ProductionPlan
+from planing.models import ProductionPlanE
 import time
 from .models import RapportJournalier
 from django.db.models import Q
@@ -8,7 +8,7 @@ from django.db.models import Q
 
 
 def rapport(request):
-    data = ProductionPlan.objects.filter(
+    data = ProductionPlanE.objects.filter(
         Q(date_created=time.strftime("%Y-%m-%d",
                                      time.localtime()))).values_list('ref',
                                                                      flat=True)
@@ -39,7 +39,7 @@ def rapportJ(request, date):
 
 def saveThings(request):
     date_created = time.strftime("%Y-%m-%d", time.localtime())
-    data = ProductionPlan.objects.filter(Q(date_created=date_created))
+    data = ProductionPlanE.objects.filter(Q(date_created=date_created))
     datalength = request.POST['datalength']
     for i in range(1, int(datalength) + 1):
         ref = data[i - 1]
@@ -68,7 +68,7 @@ def saveThings(request):
 
 def saveRapport(request):
     date_created = time.strftime("%Y-%m-%d", time.localtime())
-    data = ProductionPlan.objects.filter(Q(date_created=date_created))
+    data = ProductionPlanE.objects.filter(Q(date_created=date_created))
 
     if request.method == "POST":
         datalength = request.POST['datalength']
@@ -79,7 +79,7 @@ def saveRapport(request):
             ref = request.POST['ref-{}'.format(datalength)]
             prod_physique = request.POST['prod_physique-{}'.format(datalength)]
 
-            planing = ProductionPlan((int(data[len(data) - 1].id) + 1), ref,
+            planing = ProductionPlanE((int(data[len(data) - 1].id) + 1), ref,
                                      prod_physique, date_created)
             planing.save()
 

@@ -3,7 +3,7 @@ $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
-  events: "/planing/events",
+  events: "/planing/events5",
   header: {
     left: 'prev,next today',
     center: 'title',
@@ -57,6 +57,19 @@ $("#calendar").fullCalendar({
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
+          <span class="input-group-text">Ral</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral"
+        />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
           <span class="input-group-text">Qte</span>
         </div>
         <input
@@ -97,6 +110,7 @@ $("#calendar").fullCalendar({
       })
       $("#id_form-0-ref").val(test[0]);
       $("#id_form-0-qte").val(test[1]);
+      $("#id_form-0-ral").val(test[2]);
 
       console.log($("#id_form-0-ref").val())
       $("#day").val(today)
@@ -131,6 +145,7 @@ $("#calendar").fullCalendar({
 
 
     $("#id_form-0-ref").val("");
+    $("#id_form-0-ral").val("");
     $("#id_form-0-qte").val("");
     var today = aujourdhui()
 
@@ -176,6 +191,19 @@ $("#calendar").fullCalendar({
     </div>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
+          <span class="input-group-text">Ral</span>
+        </div>
+        <input
+          type="text"
+          name="form-0-ral"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-0-ral"
+        />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
           <span class="input-group-text">Qte</span>
         </div>
         <input
@@ -202,6 +230,7 @@ $("#calendar").fullCalendar({
         var ref, qte;
         for (var j = 0; j < totalForm; j++) {
           ref = $("#id_form-" + j.toString() + "-ref").val();
+          ref = $("#id_form-" + j.toString() + "-ral").val();
           qte = $("#id_form-" + j.toString() + "-qte").val();
 
           var goodToGo = true
@@ -212,6 +241,7 @@ $("#calendar").fullCalendar({
               alert('ref ' + e['title'] + ' already there')
               event.preventDefault();
               ref = $("#id_form-" + j.toString() + "-ref").val("");
+              ref = $("#id_form-" + j.toString() + "-ral").val("");
               qte = $("#id_form-" + j.toString() + "-qte").val("");
             }
           })
@@ -229,6 +259,7 @@ $("#calendar").fullCalendar({
               ),
               $;
             $("#id_form-" + j.toString() + "-ref").val("");
+            $("#id_form-" + j.toString() + "-ral").val("");
             $("#id_form-" + j.toString() + "-qte").val("");
 
           }
