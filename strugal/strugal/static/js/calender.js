@@ -17,6 +17,8 @@ $("#calendar").fullCalendar({
 
       $("#updateModal").modal("show");
 
+
+
       var newDiv = $(`<div id='jetable'><input
       type="hidden"
       name="form-TOTAL_FORMS"
@@ -65,7 +67,9 @@ $("#calendar").fullCalendar({
           id="id_form-0-qte"
         />
     </div>
-      <!-- <div class="closeButton" id="test">&times;</div> -->
+    <button id="deleteProduct" type="button" class="btn btn-danger">
+                  Spprimer Product
+                </button>
     <input
         type="hidden"
         name="form-0-date_created"
@@ -75,8 +79,23 @@ $("#calendar").fullCalendar({
 </div><div>`)
 
       newDiv.insertBefore('#sub_mod')
+      // console.log(calEvent._id)
+      $('#deleteProduct').click(function () {
+        $("#calendar").fullCalendar('removeEvents', calEvent.id);
+        var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        console.log(csrf)
+        $.ajax({
+          url: `/planing/delete/${$("#id").val()}`,
+          type: "POST",
+          cache: false,
+          data: {
+            'csrfmiddlewaretoken': csrf
+          },
+          success: function (response) {},
+        });
 
-
+        $("#updateModal").modal("hide");
+      })
       $("#id_form-0-ref").val(test[0]);
       $("#id_form-0-qte").val(test[1]);
 
@@ -106,7 +125,12 @@ $("#calendar").fullCalendar({
   },
 
 
-  dayClick: function (date, jsEvent, view) {
+  dayClick: async function (date, jsEvent, view, ) {
+
+    var events = await getEventOfDay(date.format())
+
+
+
     $("#id_form-0-ref").val("");
     $("#id_form-0-qte").val("");
     var today = aujourdhui()
@@ -115,7 +139,7 @@ $("#calendar").fullCalendar({
       $('#add_more').show()
       $("#inquiryModal").modal("show");
 
-      //por regler le probleme des id répliquer concernant le nombre de form
+      //pour regler le probleme des id répliquer concernant le nombre de form
       $(`<div id='jetable'><input
       type="hidden"
       name="form-TOTAL_FORMS"
@@ -163,7 +187,6 @@ $("#calendar").fullCalendar({
           id="id_form-0-qte"
         />
     </div>
-      <!-- <div class="closeButton" id="test">&times;</div> -->
     <input
         type="hidden"
         name="form-0-date_created"
@@ -175,15 +198,29 @@ $("#calendar").fullCalendar({
 
       $("#jour").val(date.format())
       $('#id_form-0-date_created').val($("#jour").val())
-      console.log(jsEvent)
-      $("#inquiryModal").submit(function () {
+
+      $("#inquiryModal").submit(function (event) {
         var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
         var ref, qte;
         for (var j = 0; j < totalForm; j++) {
           ref = $("#id_form-" + j.toString() + "-ref").val();
           qte = $("#id_form-" + j.toString() + "-qte").val();
 
-          if (ref && qte) {
+          var goodToGo = true
+
+          events.forEach((e) => {
+            if (e['title'] === ref) {
+              goodToGo = false;
+              alert('ref ' + e['title'] + ' already there')
+              event.preventDefault();
+              ref = $("#id_form-" + j.toString() + "-ref").val("");
+              qte = $("#id_form-" + j.toString() + "-qte").val("");
+            }
+          })
+
+
+          if (ref && qte && goodToGo) {
+            console.log(goodToGo)
             $("#calendar").fullCalendar(
                 "renderEvent", {
                   title: ref + "\n" + qte,
@@ -214,6 +251,26 @@ function aujourdhui() {
 
   today = yyyy + '-' + mm + '-' + dd;
   return today
+}
+
+async function getEventOfDay(day) {
+
+  var json
+  try {
+    json = await $.ajax({
+      url: `/planing/getdate/${day}`,
+      type: "GET",
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'JSON',
+
+    })
+    return json
+  } catch (error) {
+    console.log(error)
+  };
+
 }
 
 

@@ -22,25 +22,37 @@ def events(request):
             event_sub_arr['start'] = i.date_created
             event_sub_arr['end'] = i.date_created
             event_arr.append(event_sub_arr)
-        print(type(event_arr))
+        # print(type(event_arr))
         return HttpResponse(json.dumps(event_arr))
 
 
 def update(request, pk):
-    # form = ProductFormset(request.POST,
-    #                       queryset=ProductionPlan.objects.get(id=pk))
-    # print(form[-1])
     if request.method == 'POST':
         form = ProductFormset(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
-            #form = ProductFormset(request.POST,queryset=ProductionPlan.objects.get(id=pk))
-            #form.save()
             elem = ProductionPlan.objects.get(id=int(pk))
             elem.qte = int(form.cleaned_data[0]['qte'])
             elem.ref = form.cleaned_data[0]['ref']
             elem.save()
             return render(request, "planing/index.html")
+
+
+def delete(request, pk):
+    if request.method == 'POST':
+        elem = ProductionPlan.objects.get(id=int(pk))
+        elem.delete()
+        return HttpResponse("Deleted")
+
+
+def getDate(request, date):
+    events = ProductionPlan.objects.filter(date_created=date)
+    event_arr = []
+    for i in events:
+        event_sub_arr = {}
+        event_sub_arr['title'] = i.ref
+        event_arr.append(event_sub_arr)
+    print(type(event_arr))
+    return HttpResponse(json.dumps(event_arr, cls=DjangoJSONEncoder))
 
 
 def planing(request):
@@ -49,13 +61,22 @@ def planing(request):
 
     product = ProductionPlan.objects.values()
     list_result = [entry for entry in product]
+    print('list format {}'.format(list_result))
+    print('request {}'.format(request))
 
     if request.method == 'POST':
         if formset.is_valid():
 
             for form in formset:
-                instance = form.save(commit=False)
-                instance.save()
+                is_there = None
+                try:
+                    is_there = ProductionPlan.objects.get(
+                        ref=form.cleaned_data['ref'],
+                        date_created=form.cleaned_data['date_created'])
+                except:
+                    print(is_there)
+                    instance = form.save(commit=False)
+                    instance.save()
 
             # formset.save()
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  </head>
+  <body>
+    <script>
+      $(function () {
+        $("#datepicker").datepicker({
+          dateFormat: "yy-mm-dd",
+          onSelect: function (dateText, inst) {
+            console.log($("#datepicker").val());
+            window.location = dateText;
+          },
+        });
+        $("#datepicker").val($("#datepicker").val());
+      });
+    </script>
+    <p>Date: <input type="text" id="datepicker" value="{{date}}" /></p>
+    <div style="max-width: 900px; margin: 40px auto">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th class="text-center" scope="col" rowspan="2">Reference</th>
+            <th
+              class="text-center"
+              scope="col"
+              rowspan="{{data|length|add:'2' }}"
+            >
+              OBJ
+            </th>
+            <th class="text-center" scope="col" colspan="2">PP</th>
+            <th class="text-center" scope="col" colspan="2">PC</th>
+            <th class="text-center" scope="col" colspan="2">PNC</th>
+            <th class="text-center" scope="col" colspan="2">DG</th>
+            <th class="text-center" scope="col" rowspan="2">NBR</th>
+            <th class="text-center" scope="col" rowspan="2">NOF</th>
+          </tr>
+          <tr>
+            <th class="text-center">en tonne</th>
+            <th class="text-center">en %</th>
+            <th class="text-center">en tonne</th>
+            <th class="text-center">en %</th>
+            <th class="text-center">en tonne</th>
+            <th class="text-center">en %</th>
+            <th class="text-center">en tonne</th>
+            <th class="text-center">en %</th>
+          </tr>
+
+          {% for d in data %}
+          <tr>
+            <td>{{d.ref.ref}}</td>
+            <td>{{d.prod_physique}}</td>
+            <td>{{d.prod_physique_pou}}</td>
+            <td>{{d.prod_conforme}}</td>
+            <td>{{d.prod_conforme_pou}}</td>
+            <td>{{d.prod_non_conforme}}</td>
+            <td>{{d.prod_non_conforme_pou}}</td>
+            <td>{{d.deche_geometrique}}</td>
+            <td>{{d.deche_geometrique_pou}}</td>
+            <td>{{d.nbr_barre}}</td>
+            <td>{{d.n_of}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

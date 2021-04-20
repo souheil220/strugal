@@ -60,91 +60,100 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <!-- <input type="text" value="{{product}}" hidden /> -->
+    <input type="text" value="{{product}}" hidden />
     <div id="calendar"></div>
-    <div style="height: 40px; background: red; max-width: 1100px; margin: auto">
-      <table style="width: 100%; height: 100%; border: 3px red double">
-        <thead>
-          <tr>
-            <th class="fc-day-header fc-widget-header fc-sun">Sun 4/4</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-mon">Mon 4/5</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-tue">Tue 4/6</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-wed">Wed 4/7</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-thu">Thu 4/8</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-fri">Fri 4/9</th>
-            <th class="vl"></th>
-            <th class="fc-day-header fc-widget-header fc-sat">Sat 4/10</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
+    <!-- <div style="height: 40px; max-width: 900px; margin: 40px auto"> -->
+    <table
+      style="width: 900px; margin: 40px auto; height: 100%; border: 3px red"
+    >
+      <thead>
+        <tr>
+          <td>
+            <div class="text-center">
+              <table style="width: 100%; height: 100%; border: 3px red">
+                <thead>
+                  <tr>
+                    <th style="width: 128px">Sun 4/11</th>
+                    <th style="width: 128px">Mon 4/12</th>
+                    <th style="width: 128px">Tue 4/13</th>
+                    <th style="width: 128px">Wed 4/14</th>
+                    <th style="width: 128px">Thu 4/15</th>
+                    <th style="width: 129px">Fri 4/16</th>
+                    <th style="width: 129px">Sat 4/17</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </thead>
+    </table>
+    <!-- </div> -->
     <div class="modal fade" id="inquiryModal" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
-              <div class="modal-header">
-              <h5 class="modal-title" id="inquiryModalLabel">
-                  Ajouter Produit(s)
-              </h5>
-              <button type="button" class="close" data-dismiss="modal">
-                  <span>&times;</span>
-              </button>
+          <div class="modal-header">
+            <h5 class="modal-title" id="inquiryModalLabel">
+              Ajouter Produit(s)
+            </h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" id="myForm">
+              {% csrf_token %}
+              <div id="empty_form">
+                <div id="turningPoint" style="margin: 5px">
+                  <button id="add_more" type="button" class="btn btn-primary">
+                    Add Product
+                  </button>
+                </div>
+                <input
+                  type="submit"
+                  value="Send"
+                  class="btn btn-block btn-secondary"
+                />
+                <input id="jour" hidden />
+                <hr />
               </div>
-              <div class="modal-body">
-                  <form method="POST" enctype="multipart/form-data" id="myForm">
-                      {% csrf_token %}
-                      <div id="empty_form">
-                          <div id='turningPoint' style="margin: 5px">
-                              <button id="add_more" type="button" class="btn btn-primary">
-                              Add Product
-                              </button>
-                          </div>
-                          <input
-                              type="submit"
-                              value="Send"
-                              class="btn btn-block btn-secondary"
-                          />
-                          <input id="jour" hidden />
-                          <hr />
-                      </div>
-                  </form>
-              </div>
+            </form>
+          </div>
         </div>
       </div>
-  </div>
-
-  <div class="modal fade" id="updateModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Modifier Produit</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="id" hidden />
-                <form method="POST" enctype="multipart/form-data" id="updateForm">
-                    {% csrf_token %}
-                    <div id="empty_form_update">
-                    <input id="sub_mod"
-                    type="submit"
-                    value="Send"
-                    class="btn btn-block btn-secondary"
-                    />
-                    <input id="day" hidden />
-                    <hr />
-                </form>
-            </div>
-        </div>
     </div>
-</div>
 
-    <script src="{% static 'js/newProduct.js' %}"></script>
+    <div class="modal fade" id="updateModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Modifier Produit</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="text" id="id" hidden />
+            <form method="POST" enctype="multipart/form-data" id="updateForm">
+              {% csrf_token %}
+              <div id="empty_form_update">
+                <input
+                  style="margin: 2px 0"
+                  id="sub_mod"
+                  type="submit"
+                  value="Send"
+                  class="btn btn-block btn-secondary"
+                />
+                <input id="day" hidden />
+                <hr />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/buttonsRelated.js' %}"></script>
     <script src="{% static 'js/calender.js' %}"></script>
     <script>
       $("#myForm").submit(function (e) {
