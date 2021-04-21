@@ -1,9 +1,11 @@
 //alert(productval)
+var url = window.location.href
+url = url.substring(30)
 $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
-  events: "/planing/events3",
+  events: `/planing/a?palning=` + url + `/events`,
   header: {
     left: 'prev,next today',
     center: 'title',
@@ -14,7 +16,7 @@ $("#calendar").fullCalendar({
     var today = aujourdhui()
     if (today <= calEvent.start._i) {
       var test = (calEvent.title).split('\n')
-
+      console.log(test)
       $("#updateModal").modal("show");
 
 

@@ -158,7 +158,7 @@
     </div>
 
     <script src="{% static 'js/buttonsRelated.js' %}"></script>
-    <script src="{% static 'js/calenderRPT.js' %}"></script>
+    <script src="{% static 'js/calender.js' %}"></script>
     <script>
       $("#myForm").submit(function (e) {
         e.preventDefault();
@@ -188,7 +188,7 @@
         var formData = new FormData(this);
         console.log(formData);
         $.ajax({
-          url: `/planing/update/${$("#id").val()}`,
+          url: `/planing/update/${$("#id").val()}?ppt=rpt`,
           type: "POST",
           data: formData,
           cache: false,
