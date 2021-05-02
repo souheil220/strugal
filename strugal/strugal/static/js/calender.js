@@ -41,8 +41,25 @@ $("#calendar").fullCalendar({
 
 
   dayClick: async function (date, jsEvent, view, ) {
-
     var events = await getEventOfDay(date.format())
+    var today = aujourdhui()
+    if (url === 'anodisation') {
+      dayClickAnnodisation(date)
+      anodisationLB(test, calEvent, 'anodisation')
+    } else if (url === 'laquageCouleur') {
+      dayClicklaquageBlanc()
+      anodisationLB(test, calEvent, 'laquageCouleur')
+    } else if (url === 'rpt') {
+      dayClickRPT()
+      rpt(test, calEvent, 'rpt')
+    } else {
+      dayClickNormal()
+      normal(test, calEvent, url)
+    }
+
+
+
+
 
 
 
@@ -156,6 +173,134 @@ $("#calendar").fullCalendar({
   },
 
 });
+
+// rani habes hna 
+
+function dayClickAnnodisation() {
+  $("#id_form-0-ref").val("");
+  $("#id_form-0-qte").val("");
+  $("#id_form-0-ral").val("");
+
+  if (today <= date.format()) {
+    $('#add_more').show()
+    $("#inquiryModal").modal("show");
+
+    //pour regler le probleme des id répliquer concernant le nombre de form
+    $(`<div id='jetable'><input
+    type="hidden"
+    name="form-TOTAL_FORMS"
+    value="1"
+    id="id_form-TOTAL_FORMS"
+  /><input
+    type="hidden"
+    name="form-INITIAL_FORMS"
+    value="0"
+    id="id_form-INITIAL_FORMS"
+  /><input
+    type="hidden"
+    name="form-MIN_NUM_FORMS"
+    value="0"
+    id="id_form-MIN_NUM_FORMS"
+  /><input
+    type="hidden"
+    name="form-MAX_NUM_FORMS"
+    value="1000"
+    id="id_form-MAX_NUM_FORMS"
+  />
+<div>
+  <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Ref</span>
+      </div>
+      <input
+        type="text"
+        name="form-0-ref"
+        class="form-control"
+        required="true"
+        maxlength="255"
+        id="id_form-0-ref"
+      />
+  </div>
+  <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Ral</span>
+      </div>
+      <input
+        type="text"
+        name="form-0-ral"
+        class="form-control"
+        required="true"
+        maxlength="255"
+        id="id_form-0-ral"
+      />
+  </div>
+  <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Qte</span>
+      </div>
+      <input
+        type="number"
+        name="form-0-qte"
+        class="form-control"
+        required="true"
+        id="id_form-0-qte"
+      />
+  </div>
+  <input
+      type="hidden"
+      name="form-0-date_created"
+      id="id_form-0-date_created"
+  />
+  </div></div>`).insertBefore('#turningPoint')
+
+    $("#jour").val(date.format())
+    $('#id_form-0-date_created').val($("#jour").val())
+
+    $("#inquiryModal").submit(function (event) {
+      var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
+      var ref, qte, ral;
+      for (var j = 0; j < totalForm; j++) {
+        ref = $("#id_form-" + j.toString() + "-ref").val();
+        qte = $("#id_form-" + j.toString() + "-qte").val();
+        ral = $("#id_form-" + j.toString() + "-ral").val();
+
+        var goodToGo = true
+
+        events.forEach((e) => {
+          if (e['title'] === ref) {
+            goodToGo = false;
+            alert('ref ' + e['title'] + ' already there')
+            event.preventDefault();
+            ref = $("#id_form-" + j.toString() + "-ref").val("");
+            qte = $("#id_form-" + j.toString() + "-qte").val("");
+            ral = $("#id_form-" + j.toString() + "-ral").val("");
+          }
+        })
+
+
+        if (ref && qte && ral && goodToGo) {
+          console.log(goodToGo)
+          $("#calendar").fullCalendar(
+              "renderEvent", {
+                title: ref + "\n" + ral + "\n" + qte,
+                start: $("#jour").val(),
+                end: $("#jour").val(),
+              },
+              !0
+            ),
+            $;
+          $("#id_form-" + j.toString() + "-ref").val("");
+          $("#id_form-" + j.toString() + "-qte").val("");
+          $("#id_form-" + j.toString() + "-ral").val("");
+
+        }
+        $("#inquiryModal").modal("hide");
+        $(".fc-content .fc-time").remove();
+      }
+    });
+  }
+}
+
 
 function aujourdhui() {
   var today = new Date();
