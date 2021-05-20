@@ -7,7 +7,30 @@
         <input id="data" hidden value='{{data|length}}'>
         <div class="content">
           <div class="container-fluid">
-            <div class="row" style="display:flex;justify-content: flex-end">
+            <div class="row" style="display:flex;justify-content: space-between;align-items: flex-end; ">
+              <div class="col-md-4" style="display:flex;flex-grow:2;align-items: flex-end;justify-content: space-around;">
+                <div class="radio">
+                  <input type="radio" name="radio1" id="radio1" value="option1" checked="">
+                  <label for="radio1">Anodisation </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" name="radio1" id="radio2" value="option2">
+                  <label for="radio2">Extrusion </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" name="radio1" id="radio3" value="option3">
+                  <label for="radio3">Language Blanc </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" name="radio1" id="radio4" value="option4">
+                  <label for="radio4">Language Couleur </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" name="radio1" id="radio5" value="option5">
+                  <label for="radio5">RTP </label>
+                </div>
+              </div>
+              
               <div class="col-md-4" >
                 <h4 class="card-title">Date Picker</h4>
                 <div class="form-group">
@@ -17,13 +40,13 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="card">
+                <div class="card card-plain">
                   <div class="card-header">
                     <h4 class="card-title">Striped Table</h4>
                     <p class="category">Here is a subtitle for this table</p>
                   </div>
                   <div class="card-content table-responsive table-full-width">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
@@ -70,19 +93,7 @@
             </div> 
           </div>
         </div>
-    <!-- <script>
-      $(function () {
-        $("#datepicker").datepicker({
-          dateFormat: "yy-mm-dd",
-          onSelect: function (dateText, inst) {
-            console.log($("#datepicker").val());
-            window.location = dateText;
-          },
-        });
-        $("#datepicker").val($("#datepicker").val());
-      });
-    </script> -->
-    <!-- <p>Date: <input type="text" id="datepicker" value="{{date}}" /></p> -->
+   
     
     {% include 'partials/footer.html' %}
   </body>
@@ -97,5 +108,42 @@
 <script>
   len =  $('#data').val()
  $('#1').after('<td rowspan='+len+'></td>');
+</script>
+<script>
+  function change_page(type){
+    if(($('#la_date').val())===""){
+    var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            $('#la_date').val(today)}
+            console.log($('#la_date').val())
+          test = "/"+$('#la_date').val()+"/"+type
+          url =  window.location.href
+          some  = url.substr(url.lastIndexOf("t/")+1);
+          url = url.replace(some,test)
+          
+          console.log(test)
+          window.location = url
+  }
+   $('input[type=radio]').change(function(e) {
+        if (this.id == 'radio1') {
+          change_page("Anodisation")
+          
+        } 
+        else if (this.id == 'radio2') {
+          change_page('Extrusion')
+        } 
+        else if (this.id == 'radio3') {
+          change_page('Language Blanc')
+        } 
+        else if (this.id == 'radio4') {
+            change_page('Language Couleur')
+        }
+        else{
+          change_page('RTP')
+        }
+      });
 </script>
 </html>

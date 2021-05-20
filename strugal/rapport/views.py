@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from planing.models import ProductionPlanE
 import time
-from .models import RapportJournalier
+from .models import *
 from django.db.models import Q
 
 # Create your views here.
@@ -19,9 +19,17 @@ def rapport(request):
     })
 
 
-def rapportJ(request, date):
-
-    data = RapportJournalier.objects.filter(Q(date_created=date))
+def rapportJ(request, date, typeR):
+    if typeR == 'Anodisation':
+        data = RapportJournalierA.objects.filter(Q(date_created=date))
+    elif typeR == 'Extrusion':
+        data = RapportJournalierE.objects.filter(Q(date_created=date))
+    elif typeR == 'Language Blanc':
+        data = RapportJournalierLB.objects.filter(Q(date_created=date))
+    elif typeR == 'Language Couleur':
+        data = RapportJournalierLC.objects.filter(Q(date_created=date))
+    else:
+        data = RapportJournalierRPT.objects.filter(Q(date_created=date))
     for i in range(len(data)):
         data[i].prod_physique_pou = round(
             ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)

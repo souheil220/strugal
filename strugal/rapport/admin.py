@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RapportJournalier
+from .models import *
 import time
 
 
@@ -16,4 +16,8 @@ class Filter(admin.ModelAdmin):
     get_ref.short_description = 'ref Name'  #Renames column head
 
 
-admin.site.register(RapportJournalier, Filter)
+admin.site.register(RapportJournalierA, Filter)
+admin.site.register(RapportJournalierE, Filter)
+admin.site.register(RapportJournalierLB, Filter)
+admin.site.register(RapportJournalierLC, Filter)
+admin.site.register(RapportJournalierRPT, Filter)
