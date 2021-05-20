@@ -69,18 +69,20 @@ def saveThings(request):
 def saveRapport(request):
     date_created = time.strftime("%Y-%m-%d", time.localtime())
     data = ProductionPlanE.objects.filter(Q(date_created=date_created))
-
+    print(len(data))
     if request.method == "POST":
         datalength = request.POST['datalength']
-        if datalength == len(data):
+        if int(datalength) == len(data):
             saveThings(request)
         else:
             print(datalength)
-            ref = request.POST['ref-{}'.format(datalength)]
+            ref = request.POST.get('ref-{}'.format(datalength))
+            print('reffffffffffffffffffffffff')
+            print('ref-{}'.format(datalength))
             prod_physique = request.POST['prod_physique-{}'.format(datalength)]
 
             planing = ProductionPlanE((int(data[len(data) - 1].id) + 1), ref,
-                                     prod_physique, date_created)
+                                      prod_physique, date_created)
             planing.save()
 
             saveThings(request)
