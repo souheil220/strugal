@@ -1,155 +1,144 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <title>Rapport journalier</title>
-  </head>
+{% include 'partials/header.html' %}
   <body>
-    <form action="{% url 'saveRapport' %}" method="post" id="saveRapport">
-      <input
-        type="text"
-        name="datalength"
-        id="lenData"
-        hidden
-        value="{{list}}"
-      />
-      {% csrf_token %}
-      <table class="table table-bordered" id="ourTable">
-        <thead>
-          <tr>
-            <th scope="col">Ref</th>
-            <th scope="col">Prod physique</th>
-            <th scope="col">Prod conforme</th>
-            <th scope="col">Prod non conforme</th>
-            <th scope="col">Deche geometrique</th>
-            <th scope="col">Nbr barre</th>
-            <th scope="col">N of</th>
-            <th scope="col">Realisé</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for d in data %}
-          <tr>
-            <td>
+    <div class="wrapper">
+      {% include 'partials/side_bar.html' %}
+      <div class="main-panel">
+        {% include 'partials/nav_bar.html' %}
+        <div class="content">
+          <div class="container-fluid">
+            <form action="{% url 'saveRapport' %}" method="post" id="saveRapport">
               <input
                 type="text"
-                name="ref-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                id="id_ref-{{ forloop.counter }}"
-                value="{{d}}"
-                disabled
+                name="datalength"
+                id="lenData"
+                hidden
+                value="{{list}}"
               />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="prod_physique-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_prod_physique-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="prod_conforme-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_prod_conforme-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="prod_non_conforme-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_prod_non_conforme-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="deche_geometrique-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_deche_geometrique-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="nbr_barr-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_nbr_barre-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="n_of-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                required=""
-                id="id_n_of-{{ forloop.counter }}"
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="realise-{{ forloop.counter }}"
-                step="any"
-                class="form-control"
-                id="id_realise-{{ forloop.counter }}"
-              />
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="text-center">
-        <svg
-          id="add-one-more"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="40"
-          fill="currentColor"
-          class="bi bi-plus-circle"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-          />
-          <path
-            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-          />
-        </svg>
-      </div>
-      <div class="text-center">
-        <button class="btn btn-primary">Enregistrer</button>
-      </div>
-    </form>
-    <script src="{% static 'js/buttonsRelated.js' %}"></script>
+              {% csrf_token %}
+              <table class="table table-bordered" id="ourTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Prod physique</th>
+                    <th scope="col">Prod conforme</th>
+                    <th scope="col">Prod non conforme</th>
+                    <th scope="col">Deche geometrique</th>
+                    <th scope="col">Nbr barre</th>
+                    <th scope="col">N of</th>
+                    <th scope="col">Realisé</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for d in data %}
+                  <tr>
+                    <td>
+                      <input
+                        type="text"
+                        name="ref-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        id="id_ref-{{ forloop.counter }}"
+                        value="{{d}}"
+                        disabled
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="prod_physique-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_prod_physique-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="prod_conforme-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_prod_conforme-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="prod_non_conforme-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_prod_non_conforme-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="deche_geometrique-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_deche_geometrique-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="nbr_barr-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_nbr_barre-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        name="n_of-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        required=""
+                        id="id_n_of-{{ forloop.counter }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="realise-{{ forloop.counter }}"
+                        step="any"
+                        class="form-control"
+                        id="id_realise-{{ forloop.counter }}"
+                      />
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-center">
+                <svg
+                  id="add-one-more"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  fill="currentColor"
+                  class="bi bi-plus-circle"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                  />
+                  <path
+                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                  />
+                </svg>
+              </div>
+              <div class="text-center">
+                <button class="btn btn-primary">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        {% include 'partials/footer.html' %}
   </body>
 </html>

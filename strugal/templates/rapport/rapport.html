@@ -119,7 +119,7 @@
             today = yyyy + '-' + mm + '-' + dd;
             $('#la_date').val(today)}
             console.log($('#la_date').val())
-          test = "/"+$('#la_date').val()+"/"+type
+          test = "/"+type+"/"+$('#la_date').val()
           url =  window.location.href
           some  = url.substr(url.lastIndexOf("t/")+1);
           url = url.replace(some,test)
