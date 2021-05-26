@@ -125,7 +125,7 @@
                 href="#rapport"
                 aria-expanded="true"
               >
-                <i class="ti-calendar"></i>
+                <i class="ti-agenda"></i>
                 <p>
                   Rapport Journalier
                   <b class="caret"></b>
@@ -177,7 +177,7 @@
           {% with request.resolver_match.url_name as url_name %} 
             <li {% if url_name == 'rapport' %}class="active"{% endif %}>
               <a href='{% url "rapport" %}'>
-                <i class="ti-calendar"></i>
+                <i class="ti-write"></i>
                 <p>
                   Rapport
                 </p>

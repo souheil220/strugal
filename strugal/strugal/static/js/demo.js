@@ -1050,8 +1050,121 @@ demo = {
       .on('dp.hide', function (selected) {
         // var minDate = new Date(selected.date.valueOf());
         console.log($('#la_date').val())
-        window.location = $('#la_date').val()
+        // window.location = $('#la_date').val()
+        var date = $('#la_date').val()
+        var checked = $('input[name="radio1"]:checked').val();
+        console.log(checked)
+        $.ajax({
+          url: `/rapport/rapport/${checked}/${date}`,
+          type: "GET",
+          cache: false,
+          dataType: 'json',
+          success: function (response) {
+            var table = $('#table-div').children()
+            var new_content = ''
+            if (checked !== 'Extrusion') {
+              new_content = `<table class="table table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="text-center" scope="col" rowspan="2">Reference</th>
+                          <th class="text-center" scope="col" rowspan="2">OBJ</th>
+                          <th class="text-center" scope="col" rowspan="2">PPPR</th>
+                          <th class="text-center" scope="col" colspan="2">PP</th>
+                          <th class="text-center" scope="col" colspan="2">PC</th>
+                          <th class="text-center" scope="col" colspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">NOF</th>
+                        </tr>
+                        <tr>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                        </tr>
+                      </thead>
+                      <tbody>`
+              for (d in response['final_data']) {
 
+                new_content = new_content + `
+                            
+                            <tr>
+                              <td id='1'>` + response['final_data'][d]["ref"] + `</td>
+                              <td id='ppr'>` + response['final_data'][d]["prod_physique"] + `<td/>
+                              <td>` + response['final_data'][d]["prod_conforme"] + `</td>
+                              <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
+                              <td>` + response['final_data'][d]["prod_conforme"] + `</td>
+                              <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
+                              <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
+                              <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `</td>
+                              <td>` + response['final_data'][d]["n_of"] + `</td>
+                            </tr>
+                         `
+              }
+              new_content = new_content + `
+                      </tbody>
+                    </table>`
+              table.replaceWith(new_content)
+              try {
+
+                $('#1').after('<td rowspan=' + len + '>' + response['final_data'][0]["obj"] + '</td>');
+                $('#ppr').after('<td id="pprid"rowspan=' + len + '>' + response['final_data'][0]["prod_physique"] + '</td><td rowspan=' + len + '>' + response['final_data'][0]["prod_physique_pour"] + '</td>')
+              } catch (error) {
+                console.log('no data')
+              }
+            } else {
+              new_content = `<table class="table table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="text-center" scope="col" rowspan="2">Reference</th>
+                          <th class="text-center" scope="col" rowspan="2">OBJ</th>
+                          <th class="text-center" scope="col" colspan="2">PP</th>
+                          <th class="text-center" scope="col" colspan="2">PC</th>
+                          <th class="text-center" scope="col" colspan="2">PNC</th>
+                          <th class="text-center" scope="col" colspan="2">DG</th>
+                          <th class="text-center" scope="col" rowspan="2">NBR</th>
+                          <th class="text-center" scope="col" rowspan="2">NOF</th>
+                        </tr>
+                        <tr>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                          <th class="text-center">en tonne</th>
+                          <th class="text-center">en %</th>
+                        </tr>
+                      </thead>
+                      <tbody>`
+
+              for (d in response['final_data']) {
+                console.log(response['final_data'][d])
+                new_content = new_content + `<tr>
+                          <td id='1'>` + response['final_data'][d]["ref"] + `</td>
+                          <td>` + response['final_data'][d]["prod_physique"] + `</td>
+                          <td>` + response['final_data'][d]["prod_physique_pou"] + `</td>
+                          <td>` + response['final_data'][d]["prod_conforme"] + `</td>
+                          <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
+                          <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
+                          <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `</td>
+                          <td>` + response['final_data'][d]["deche_geometrique"] + `</td>
+                          <td>` + response['final_data'][d]["deche_geometrique_pou"] + `</td>
+                          <td>` + response['final_data'][d]["nbr_barre"] + `</td>
+                          <td>` + response['final_data'][d]["n_of"] + `</td>
+                        </tr>`
+              }
+              new_content = new_content + ` </tbody>
+                    </table>`
+              table.replaceWith(new_content)
+              len = $('#data').val()
+              $('#1').after('<td rowspan=' + len + '>7</td>');
+            }
+
+
+
+          },
+        });
       });
 
     $('.timepicker').datetimepicker({
