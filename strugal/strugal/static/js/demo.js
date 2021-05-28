@@ -1060,6 +1060,7 @@ demo = {
           cache: false,
           dataType: 'json',
           success: function (response) {
+            console.log(response['final_data'])
             var table = $('#table-div').children()
             var new_content = ''
             if (checked !== 'Extrusion') {

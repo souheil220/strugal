@@ -3,8 +3,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.rapport, name="rapport"),
-    path("rapport/rapportAujourdui", views.index, name="rapportAujourdui"),
+    path("rapportR/<str:typeR>", views.rediger_rapport, name="rapport"),
+    path("rapportA/rapportAujourdui",
+         views.rapportAujourdui,
+         name="rapportAujourdui"),
     path("rapport/<str:typeR>/<str:dateC>", views.rapportJ, name="rapportJ"),
-    path("saveRapport", views.saveRapport, name="saveRapport"),
+    path("saveRapport/<str:typeR>", views.saveRapport, name="saveRapport"),
 ]

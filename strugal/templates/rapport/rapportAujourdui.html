@@ -51,16 +51,13 @@
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
+                          <th class="text-center" scope="col" rowspan="2">PPPR</th>
                           <th class="text-center" scope="col" colspan="2">PP</th>
                           <th class="text-center" scope="col" colspan="2">PC</th>
                           <th class="text-center" scope="col" colspan="2">PNC</th>
-                          <th class="text-center" scope="col" colspan="2">DG</th>
-                          <th class="text-center" scope="col" rowspan="2">NBR</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
                         </tr>
                         <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
                           <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
@@ -73,15 +70,11 @@
                         {% for d in data %}
                         <tr>
                           <td id='{{ forloop.counter }}'>{{d.ref.ref}}</td>
-                          <td>{{d.prod_physique}}</td>
-                          <td>{{d.prod_physique_pou}}</td>
+                          <td id='ppr'>{{d.prod_physique_p_r}}</td>
                           <td>{{d.prod_conforme}}</td>
-                          <td>{{d.prod_conforme_pou}}</td>
+                          <td>{{d.prod_conforme_pou}}%</td>
                           <td>{{d.prod_non_conforme}}</td>
-                          <td>{{d.prod_non_conforme_pou}}</td>
-                          <td>{{d.deche_geometrique}}</td>
-                          <td>{{d.deche_geometrique_pou}}</td>
-                          <td>{{d.nbr_barre}}</td>
+                          <td>{{d.prod_non_conforme_pou}}%</td>
                           <td>{{d.n_of}}</td>
                         </tr>
                         {% endfor %}
@@ -97,6 +90,16 @@
     
     {% include 'partials/footer.html' %}
   </body>
+  
+  <script>
+    
+    $('#1').after('<td rowspan={{data|length}}>{{data.0.obj}}</td>');
+    $('#ppr').after('<td rowspan={{data|length}}> {{data.0.prod_physique}}</td><td rowspan={{data|length}}>{{data.0.prod_physique_pou}}%</td>')
+  
+  </script>
+
+  
+
   <script type="text/javascript">
     $().ready(function(){
   // Init Sliders
@@ -105,6 +108,8 @@
         demo.initFormExtendedDatetimepickers();
     });
 </script>
+
+
 <script>
   function change_page(type){
     if(($('#la_date').val())===""){
@@ -128,6 +133,7 @@
            var table = $('#table-div').children()
            var new_content = ''
            if (type !== 'Extrusion'){
+             console.log(response['final_data'])
             new_content = `<table class="table table-hover table-bordered">
                       <thead>
                         <tr>
@@ -152,16 +158,13 @@
                         for (d in response['final_data']){
 
                             new_content = new_content + `
-                            
                             <tr>
                               <td id='1'>`+response['final_data'][d]["ref"]+`</td>
-                              <td id='ppr'>`+response['final_data'][d]["prod_physique"]+`<td/>
+                              <td id='ppr'>`+response['final_data'][d]["prod_physique_par_ref"]+`</td>
                               <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_conforme_pou"]+`</td>
-                              <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_conforme_pou"]+`</td>
+                              <td>`+response['final_data'][d]["prod_conforme_pou"]+`%</td>
                               <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`</td>
+                              <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`%</td>
                               <td>`+response['final_data'][d]["n_of"]+`</td>
                             </tr>
                          `
@@ -172,8 +175,10 @@
                     table.replaceWith(new_content)
                     try {
                         
-                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'</td>');
-                        $('#ppr').after('<td id="pprid"rowspan='+len+'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+len+'>'+response['final_data'][0]["prod_physique_pour"]+'</td>')
+                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                        $('#ppr').after('<td rowspan='+len+'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+len+'>'+response['final_data'][0]["prod_physique_pou"]+'%</td>')
+                       
+  
                     } catch (error) {
                         console.log('no data')
                     }
@@ -209,13 +214,13 @@
                         new_content = new_content + `<tr>
                           <td id='1'>`+response['final_data'][d]["ref"]+`</td>
                           <td>`+response['final_data'][d]["prod_physique"]+`</td>
-                          <td>`+response['final_data'][d]["prod_physique_pou"]+`</td>
+                          <td>`+response['final_data'][d]["prod_physique_pou"]+`%</td>
                           <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                          <td>`+response['final_data'][d]["prod_conforme_pou"]+`</td>
+                          <td>`+response['final_data'][d]["prod_conforme_pou"]+`%</td>
                           <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
-                          <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`</td>
+                          <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`%</td>
                           <td>`+response['final_data'][d]["deche_geometrique"]+`</td>
-                          <td>`+response['final_data'][d]["deche_geometrique_pou"]+`</td>
+                          <td>`+response['final_data'][d]["deche_geometrique_pou"]+`%</td>
                           <td>`+response['final_data'][d]["nbr_barre"]+`</td>
                           <td>`+response['final_data'][d]["n_of"]+`</td>
                         </tr>`
@@ -226,7 +231,7 @@
                     len =  $('#data').val()
                     try {
                         
-                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'</td>');
+                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'(T)</td>');
                     } catch (error) {
                         console.log('no data')
                     }

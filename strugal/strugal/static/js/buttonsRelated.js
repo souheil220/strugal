@@ -63,7 +63,7 @@ $('#empty_form').on('click', '.remove', function () {
   $("#id_form-TOTAL_FORMS").val(parseInt(form_idx) - 1);
 });
 
-$('#add-one-more').click(function () {
+$('#add-one-more-ex').click(function () {
   var len = $('#lenData').val()
   $('#ourTable tr:last').after(`<tr>
   <td>
@@ -76,6 +76,16 @@ $('#add-one-more').click(function () {
       id="id_ref-` + (parseInt(len) + 1).toString() + `"
 
       
+    />
+  </td>
+  <td>
+    <input
+      type="text"
+      name="obj-` + ((parseInt(len) + 1).toString()) +
+    `"
+      step="any"
+      class="form-control"
+      id="id_obj-` + (parseInt(len) + 1).toString() + `"
     />
   </td>
   <td>
@@ -128,6 +138,93 @@ $('#add-one-more').click(function () {
       id="id_nbr_barre-` + (parseInt(len) + 1).toString() + `"
     />
   </td>
+  <td>
+    <input
+      type="number"
+      name="n_of-` + (parseInt(len) + 1).toString() + `"
+      step="any"
+      class="form-control"
+      required=""
+      id="id_n_of-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+  <td>
+    <input
+      type="checkbox"
+      name="realise-` + (parseInt(len) + 1).toString() + `"
+      step="any"
+      class="form-control"
+      id="id_realise-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+</tr>`);
+  $('#lenData').val((parseInt(len) + 1).toString())
+})
+
+$('#add-one-more').click(function () {
+  var len = $('#lenData').val()
+  $('#ourTable tr:last').after(`<tr>
+  <td>
+    <input
+      type="text"
+      name="ref-` + ((parseInt(len) + 1).toString()) +
+    `"
+      step="any"
+      class="form-control"
+      id="id_ref-` + (parseInt(len) + 1).toString() + `"   
+    />
+  </td>
+  <td>
+    <input
+      type="text"
+      name="obj-` + ((parseInt(len) + 1).toString()) +
+    `"
+      step="any"
+      class="form-control"
+      id="id_obj-` + (parseInt(len) + 1).toString() + `"   
+    />
+  </td>
+  <td>
+    <input
+      type="number"
+      name="prod_physique_p_r-` + ((parseInt(len) + 1).toString()) + `"
+      step="any"
+      class="form-control"
+      required=""
+      id="id_prod_physique_p_r-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+  <td>
+    <input
+      type="number"
+      name="prod_physique-` + ((parseInt(len) + 1).toString()) + `"
+      step="any"
+      class="form-control"
+      required=""
+      id="id_prod_physique-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+  <td>
+    <input
+      type="number"
+      name="prod_conforme-` + (parseInt(len) + 1).toString() + `"
+      step="any"
+      class="form-control"
+      required=""
+      id="id_prod_conforme-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+  <td>
+    <input
+      type="number"
+      name="prod_non_conforme-` + (parseInt(len) + 1).toString() + `"
+      step="any"
+      class="form-control"
+      required=""
+      id="id_prod_non_conforme-` + (parseInt(len) + 1).toString() + `"
+    />
+  </td>
+  
   <td>
     <input
       type="number"

@@ -6,7 +6,8 @@
         {% include 'partials/nav_bar.html' %}
         <div class="content">
           <div  class="container-fluid">
-            <form action="{% url 'saveRapport' %}" method="post" id="saveRapport">
+          
+            <form action="{% url 'saveRapport' typeR=typeR %}" method="post" id="saveRapport">
               <input
                 type="text"
                 name="datalength"
@@ -19,11 +20,11 @@
                 <thead>
                   <tr>
                     <th scope="col">Ref</th>
+                    <th scope="col">Objectif</th>
+                    <th scope="col">Prod physique par Ref</th>
                     <th scope="col">Prod physique</th>
                     <th scope="col">Prod conforme</th>
                     <th scope="col">Prod non conforme</th>
-                    <th scope="col">Deche geometrique</th>
-                    <th scope="col">Nbr barre</th>
                     <th scope="col">N of</th>
                     <th scope="col">Realisé</th>
                   </tr>
@@ -43,6 +44,26 @@
                       />
                     </td>
                     <td>
+                        <input
+                          type="number"
+                          name="obj-{{ forloop.counter }}"
+                          step="any"
+                          class="form-control"
+                          required=""
+                          id="id_obj-{{ forloop.counter }}"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          name="prod_physique_p_r-{{ forloop.counter }}"
+                          step="any"
+                          class="form-control"
+                          required=""
+                          id="id_prod_physique_p_r-{{ forloop.counter }}"
+                        />
+                      </td>
+                    <td>
                       <input
                         type="number"
                         name="prod_physique-{{ forloop.counter }}"
@@ -52,6 +73,7 @@
                         id="id_prod_physique-{{ forloop.counter }}"
                       />
                     </td>
+                    
                     <td>
                       <input
                         type="number"
@@ -72,26 +94,8 @@
                         id="id_prod_non_conforme-{{ forloop.counter }}"
                       />
                     </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="deche_geometrique-{{ forloop.counter }}"
-                        step="any"
-                        class="form-control"
-                        required=""
-                        id="id_deche_geometrique-{{ forloop.counter }}"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="nbr_barr-{{ forloop.counter }}"
-                        step="any"
-                        class="form-control"
-                        required=""
-                        id="id_nbr_barre-{{ forloop.counter }}"
-                      />
-                    </td>
+                   
+                    
                     <td>
                       <input
                         type="number"

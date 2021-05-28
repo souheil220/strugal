@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from planing.models import ProductionPlanE
+from planing.models import *
 import time
 from .models import *
 from django.db.models import Q
@@ -10,26 +10,56 @@ import json
 # Create your views here.
 
 
-def rapport(request):
-    data = ProductionPlanE.objects.filter(
-        Q(date_created=time.strftime("%Y-%m-%d",
-                                     time.localtime()))).values_list('ref',
-                                                                     flat=True)
+def rediger_rapport(request, typeR):
+    print('dkhalt hna')
+    if typeR == 'Extrusion':
+        data = ProductionPlanE.objects.filter(
+            Q(date_created=time.strftime(
+                "%Y-%m-%d", time.localtime()))).values_list('ref', flat=True)
+        context = {'data': data, 'list': len(data), "typeR": typeR}
+        return render(request, 'rapport/rediget_rapportE.html', context)
+    else:
+        if typeR == 'Anodisation':
+            data = ProductionPlanA.objects.filter(
+                Q(date_created=time.strftime(
+                    "%Y-%m-%d", time.localtime()))).values_list('ref',
+                                                                flat=True)
+        elif typeR == 'LaquageBlanc':
+            data = ProductionPlanLB.objects.filter(
+                Q(date_created=time.strftime(
+                    "%Y-%m-%d", time.localtime()))).values_list('ref',
+                                                                flat=True)
+        elif typeR == 'LaquageCouleur':
+            data = ProductionPlanLC.objects.filter(
+                Q(date_created=time.strftime(
+                    "%Y-%m-%d", time.localtime()))).values_list('ref',
+                                                                flat=True)
+        else:
+            data = ProductionPlanRPT.objects.filter(
+                Q(date_created=time.strftime(
+                    "%Y-%m-%d", time.localtime()))).values_list('ref01',
+                                                                flat=True)
+        context = {'data': data, 'list': len(data), "typeR": typeR}
+        return render(request, 'rapport/rediget_rapport.html', context)
 
-    return render(request, "rapport/rapport_aujourdui.html", {
-        'data': data,
-        'list': len(data)
-    })
 
-
-def index(request):
+def rapportAujourdui(request):
     aujourdhui = date.today().strftime("%Y-%m-%d")
-    data = RapportJournalierE.objects.filter(Q(date_created=aujourdhui))
+    data = RapportJournalierA.objects.filter(date_created=aujourdhui)
+    for i in range(len(data)):
+        data[i].prod_physique_pou = round(
+            ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)
+        data[i].prod_conforme_pou = round(
+            ((data[i].prod_conforme * 100 / data[i].ref.qte)), 2)
+        data[i].prod_non_conforme_pou = round(
+            ((data[i].prod_non_conforme * 100 / data[i].ref.qte)), 2)
+
     context = {"data": data}
-    return render(request, 'rapport/index.html', context)
+    return render(request, 'rapport/rapportAujourdui.html', context)
 
 
 def rapportJ(request, typeR, dateC):
+    print(typeR)
     if request.is_ajax and request.method == 'GET':
         try:
             if typeR == 'Anodisation':
@@ -42,19 +72,21 @@ def rapportJ(request, typeR, dateC):
                 data = RapportJournalierLC.objects.filter(date_created=dateC)
             else:
                 data = RapportJournalierRPT.objects.filter(date_created=dateC)
+
             if typeR == 'Extrusion':
                 for i in range(len(data)):
                     data[i].prod_physique_pou = round(
-                        ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)
+                        (((data[i].prod_physique) * 100 / data[i].ref.qte)) *
+                        1000, 2)
                     data[i].prod_conforme_pou = round(
-                        ((data[i].prod_conforme * 100 / data[i].ref.qte)), 2)
+                        ((data[i].prod_conforme * 100 /
+                          data[i].prod_physique)), 2)
                     data[i].prod_non_conforme_pou = round(
-                        ((data[i].prod_non_conforme * 100 / data[i].ref.qte)),
-                        2)
+                        ((data[i].prod_non_conforme * 100 /
+                          data[i].prod_physique)), 2)
                     data[i].deche_geometrique_pou = round(
-                        ((data[i].deche_geometrique * 100 / data[i].ref.qte)),
-                        2)
-                print('prod_non_conforme_pou ', data[0].prod_non_conforme_pou)
+                        ((data[i].deche_geometrique * 100 /
+                          data[i].prod_physique)), 2)
                 final_data = {}
                 i = 0
                 for j in data:
@@ -79,7 +111,10 @@ def rapportJ(request, typeR, dateC):
                 print("final_data ", final_data)
                 context = {"final_data": final_data}
             else:
+                print('je suis fel else')
                 for i in range(len(data)):
+                    data[i].prod_physique_pou = round(
+                        ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)
                     data[i].prod_conforme_pou = round(
                         ((data[i].prod_conforme * 100 / data[i].ref.qte)), 2)
                     data[i].prod_non_conforme_pou = round(
@@ -87,20 +122,21 @@ def rapportJ(request, typeR, dateC):
                         2)
                 final_data = {}
                 i = 0
+                print(data[0].prod_physique_pou)
                 for j in data:
                     final_data[i] = {}
                     print(j.ref.ref)
                     final_data[i]['ref'] = j.ref.ref
                     final_data[i]['obj'] = "7"
-                    final_data[i]['prod_physique'] = "1615" 
-                    final_data[i]['prod_physique_pour'] = "108%" 
-                    final_data[i]['prod_physique_par_ref'] = j.prod_physique
+                    final_data[i]['prod_physique'] = j.prod_physique
+                    final_data[i][
+                        'prod_physique_par_ref'] = j.prod_physique_p_r
                     final_data[i]['prod_physique_pou'] = j.prod_physique_pou
                     final_data[i]['prod_conforme'] = j.prod_conforme
+                    final_data[i]['prod_conforme_pou'] = j.prod_conforme_pou
                     final_data[i]['prod_non_conforme'] = j.prod_non_conforme
                     final_data[i][
                         'prod_non_conforme_pou'] = j.prod_non_conforme_pou
-                    final_data[i]['nbr_barre'] = j.nbr_barre
                     final_data[i]['n_of'] = j.n_of
                     final_data[i]['date_created'] = j.date_created
                     i += 1
@@ -116,62 +152,130 @@ def rapportJ(request, typeR, dateC):
         raise Http404
 
 
-def saveThings(request):
-    date_created = time.strftime("%Y-%m-%d", time.localtime())
-    data = ProductionPlanE.objects.filter(Q(date_created=date_created))
-    datalength = request.POST['datalength']
+def savePlaning(request, typeR, longeur, datalength, date_created):
+    for i in range(longeur, datalength):
+        ref = request.POST.get('ref-{}'.format(i))
+        if typeR == 'Extrusion':
+            prod_physique = request.POST.get('prod_physique-{}'.format(i))
+            planing = ProductionPlanE(ref=ref,
+                                      qte=prod_physique,
+                                      date_created=date_created)
+        else:
+            prod_physique = request.POST.get('prod_physique_p_r-{}'.format(i))
+            if typeR == 'Anodisation':
+                planing = ProductionPlanA(ref=ref,
+                                          qte=prod_physique,
+                                          date_created=date_created)
+            elif typeR == 'LaquageBlanc':
+                planing = ProductionPlanLB(ref=ref,
+                                           qte=prod_physique,
+                                           date_created=date_created)
+            elif typeR == 'LaquageCouleur':
+                planing = ProductionPlanLC(ref=ref,
+                                           qte=prod_physique,
+                                           date_created=date_created)
+            else:
+                planing = ProductionPlanRPT(ref=ref,
+                                            qte=prod_physique,
+                                            date_created=date_created)
+
+        planing.save()
+
+
+def rapportEALR(request, typeR, data, datalength):
+
     for i in range(1, int(datalength) + 1):
         ref = data[i - 1]
+        obj = request.POST['obj-{}'.format(i)]
         prod_physique = request.POST['prod_physique-{}'.format(i)]
         prod_conforme = request.POST['prod_conforme-{}'.format(i)]
         prod_non_conforme = request.POST['prod_non_conforme-{}'.format(i)]
-        deche_geometrique = request.POST['deche_geometrique-{}'.format(i)]
-        nbr_barre = request.POST['nbr_barr-{}'.format(i)]
         n_of = request.POST['n_of-{}'.format(i)]
         realise = request.POST.get('realise-{}'.format(i), 'False')
         if realise == 'on':
             realise = 'True'
 
-        rapport = RapportJournalierE(ref=ref,
-                                     prod_physique=prod_physique,
-                                     prod_conforme=prod_conforme,
-                                     prod_non_conforme=prod_non_conforme,
-                                     deche_geometrique=deche_geometrique,
-                                     nbr_barre=nbr_barre,
-                                     n_of=n_of,
-                                     realise=realise)
+        if typeR == "Extrusion":
+            deche_geometrique = request.POST['deche_geometrique-{}'.format(i)]
+            nbr_barre = request.POST['nbr_barr-{}'.format(i)]
+            rapport = RapportJournalierE(ref=ref,
+                                         prod_physique=prod_physique,
+                                         obj=obj,
+                                         prod_conforme=prod_conforme,
+                                         prod_non_conforme=prod_non_conforme,
+                                         deche_geometrique=deche_geometrique,
+                                         nbr_barre=nbr_barre,
+                                         n_of=n_of,
+                                         realise=realise)
+        else:
+            prod_physique_p_r = request.POST['prod_physique_p_r-{}'.format(i)]
+            if typeR == 'Anodisation':
+                rapport = RapportJournalierA(
+                    ref=ref,
+                    obj=obj,
+                    prod_physique_p_r=prod_physique_p_r,
+                    prod_physique=prod_physique,
+                    prod_conforme=prod_conforme,
+                    prod_non_conforme=prod_non_conforme,
+                    n_of=n_of)
+            elif typeR == 'LaquageBlanc':
+                rapport = RapportJournalierLB(
+                    ref=ref,
+                    obj=obj,
+                    prod_physique_p_r=prod_physique_p_r,
+                    prod_physique=prod_physique,
+                    prod_conforme=prod_conforme,
+                    prod_non_conforme=prod_non_conforme,
+                    n_of=n_of)
+            elif typeR == 'LaquageCouleur':
+                rapport = RapportJournalierLC(
+                    ref=ref,
+                    obj=obj,
+                    prod_physique_p_r=prod_physique_p_r,
+                    prod_physique=prod_physique,
+                    prod_conforme=prod_conforme,
+                    prod_non_conforme=prod_non_conforme,
+                    n_of=n_of)
+            else:
+                rapport = RapportJournalierRPT(
+                    ref=ref,
+                    obj=obj,
+                    prod_physique_p_r=prod_physique_p_r,
+                    prod_physique=prod_physique,
+                    prod_conforme=prod_conforme,
+                    prod_non_conforme=prod_non_conforme,
+                    n_of=n_of)
 
         rapport.save()
 
 
-def saveRapport(request):
+def saveRapport(request, typeR):
     date_created = time.strftime("%Y-%m-%d", time.localtime())
-    data = ProductionPlanE.objects.filter(Q(date_created=date_created))
+    if typeR == 'Extrusion':
+        data = ProductionPlanE.objects.filter(Q(date_created=date_created))
+    elif typeR == 'Anodisation':
+        data = ProductionPlanA.objects.filter(Q(date_created=date_created))
+    elif typeR == 'LaquageBlanc':
+        data = ProductionPlanLB.objects.filter(Q(date_created=date_created))
+    elif typeR == 'LaquageCouleur':
+        data = ProductionPlanLC.objects.filter(Q(date_created=date_created))
+    else:
+        data = ProductionPlanRPT.objects.filter(Q(date_created=date_created))
+
     if request.method == "POST":
         datalength = request.POST['datalength']
         if int(datalength) == len(data):
-            saveThings(request)
+            rapportEALR(request, typeR, data, datalength)
+
         else:
             if len(data) == 0:
                 longeur = 1
-                print("longueur if ", longeur)
             else:
                 longeur = len(data)
-                print("longueur else ", longeur)
-            print(datalength)
-            for i in range(longeur, int(datalength) + 1):
-                print("rani fel for ", i)
-                print('ref-{}'.format(i))
-                ref = request.POST.get('ref-{}'.format(i))
-                print("ref ", ref)
-                prod_physique = request.POST.get('prod_physique-{}'.format(i))
-                print("prod_physique ", prod_physique)
-                planing = ProductionPlanE(ref=ref,
-                                          qte=prod_physique,
-                                          date_created=date_created)
 
-                planing.save()
+            savePlaning(request, typeR, longeur,
+                        int(datalength) + 1, date_created)
 
-            saveThings(request)
+            rapportEALR(request, typeR, data, datalength)
 
-        return redirect('rapport')
+        return redirect('rapportAujourdui')
