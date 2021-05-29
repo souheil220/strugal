@@ -1,54 +1,169 @@
+var url = window.location.href
+url = url.substring(30)
+
+function wichDiv(number) {
+  if (url === 'anodisation' || url === 'laquageCouleur') {
+    return `
+    <div id='div-num-` + number + ` style="padding-bottom: 5%;"'>
+    <hr>
+    <div class="input-group">
+    <span class="input-group-addon">Ref</span>
+        <input
+          type="text"
+          name="form-` + number + `-ref"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-` + number + `-ref"
+        />
+    </div>
+    <div class="input-group">
+       
+          <span class="input-group-addon">Ral </span>
+        <input
+          type="text"
+          name="form-` + number + `-ral"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-` + number + `-ral"
+        />
+    </div>
+    <div class="input-group">
+      
+          <span class="input-group-addon">Qte</span>
+        
+        <input
+          type="number"
+          name="form-` + number + `-qte"
+          class="form-control"
+          required="true"
+          id="id_form-` + number + `-qte"
+        />
+    </div>
+    <div class="closeButton" id='test'><div class='remove' id='remove_` +
+      number +
+      `'>&times;</div></div>
+    </div>`
+  } else if (url === 'rpt') {
+    return `<div id='div-num-` + number + `' style="padding-bottom: 5%;">
+    <div class="input-group ">
+        
+          <span class="input-group-addon">Ref01</span>
+    
+        <input
+          type="text"
+          name="form-` + number + `-ref01"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-` + number + `-ref01"
+        />
+    </div>
+    <div class="input-group">
+        
+          <span class="input-group-addon">Ref02</span>
+        
+        <input
+          type="text"
+          name="form-` + number + `-ref02"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-` + number + `-ref02"
+        />
+    </div>
+    <div class="input-group">
+        
+          <span class="input-group-addon">Ral01</span>
+        
+        <input
+          type="text"
+          name="form-` + number + `-ral01"
+          class="form-control"
+          required="true"
+          maxlength="255"
+          id="id_form-` + number + `-ral01"
+        />
+    </div>
+    <div class="input-group">
+    
+      <span class="input-group-addon">Ral02</span>
+    
+    <input
+      type="text"
+      name="form-` + number + `-ral02"
+      class="form-control"
+      required="true"
+      maxlength="255"
+      id="id_form-` + number + `-ral02"
+    />
+    </div>
+    <div class="input-group">
+        
+          <span class="input-group-addon">Qte</span>
+    
+        <input
+          type="number"
+          name="form-` + number + `-qte"
+          class="form-control"
+          required="true"
+          id="id_form-` + number + `-qte"
+        />
+    </div>
+    <div class="closeButton" id='test'><div class='remove' id='remove_` +
+      number +
+      `'>&times;</div></div>
+    </div>`
+  } else {
+    return `<div id='div-num-` + number + `'style="padding-bottom: 5%;">
+  <div class="input-group">
+      
+        <span class="input-group-addon">Ref</span>
+      
+      <input
+        type="text"
+        name="form-` + number + `-ref"
+        class="form-control"
+        required="true"
+        maxlength="255"
+        id="id_form-` + number + `-ref"
+      />
+  </div>
+  <div class="input-group">
+      
+        <span class="input-group-addon">Qte</span>
+      
+      <input
+        type="number"
+        name="form-` + number + `-qte"
+        class="form-control"
+        required="true"
+        id="id_form-` + number + `-qte"
+      />
+  </div>
+  <div class="closeButton" id='test'>
+  <i class='ti-trash remove'id='remove_` +
+      number +
+      `'></i>
+  </div>
+  </div>`
+  }
+}
+
+
+
+
 $("#add_more").click(function () {
   $("#removeit").attr('disabled', false);
   var form_idx = $("#id_form-TOTAL_FORMS").val();
 
-  $(`
-  <div id='div-num-` + form_idx + `'>
-    <hr>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Ref</span>
-      </div>
-      <input
-        type="text"
-        name="form-` + parseInt(form_idx).toString() + `-ref"
-        class="form-control"
-        required="true"
-        maxlength="255"
-        id="id_form-` + parseInt(form_idx).toString() + `-ref"
-      />
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Qte</span>
-      </div>
-      <input
-        type="text"
-        name="form-` +
-    parseInt(form_idx).toString() +
-    `-qte"
-        class="form-control"
-        required="true"
-        id="id_form-` +
-    parseInt(form_idx).toString() +
-    `-qte"
-      />
-      </div>
-      <div class="closeButton" id='test'><div class='remove' id='remove_` +
-    parseInt(form_idx).toString() +
-    `'>&times;</div></div>
-      <input type="hidden" name="form-` +
-    parseInt(form_idx).toString() +
-    `-date_created" id="id_form-` +
-    parseInt(form_idx).toString() +
-    `-date_created" value="` + $("#jour").val() + `">
-  </div>
-   `.replace(
-      /__prefix__/g,
-      form_idx
-    )).insertBefore('#turningPoint');
+  $(wichDiv(form_idx).replace(
+    /__prefix__/g,
+    form_idx)).insertBefore('#turningPoint');
   $("#id_form-TOTAL_FORMS").val(parseInt(form_idx) + 1);
+
+
 });
 
 $('#empty_form').on('click', '.remove', function () {
