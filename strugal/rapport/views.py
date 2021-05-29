@@ -10,36 +10,72 @@ import json
 # Create your views here.
 
 
+def checkRepport(productP, reportM, typeR):
+    data = productP.objects.filter(
+        Q(date_created=time.strftime("%Y-%m-%d", time.localtime())))
+
+    test = []
+    try:
+        for plan in data:
+            repport = reportM.objects.filter(ref=plan).values()
+            test.append(repport)
+
+        i = 0
+
+        for t in test:
+            # print(t)
+            if i < len(test):
+
+                if typeR == 'Extrusion':
+
+                    data[i].deche_geometrique = t[0]['deche_geometrique']
+                    # print(data[i].deche_geometrique)
+                    data[i].nbr_barre = t[0]['nbr_barre']
+                else:
+                    data[i].prod_physique_p_r = t[0]['prod_physique_p_r']
+
+                data[i].prod_physique = t[0]['prod_physique']
+                data[i].obj = t[0]['obj']
+                data[i].prod_conforme = t[0]['prod_conforme']
+                data[i].prod_non_conforme = t[0]['prod_non_conforme']
+                data[i].n_of = t[0]['n_of']
+                data[i].realise = t[0]['realise']
+
+            i += 1
+            # print("data : ", t[i].realise)
+        print("data : ", data)
+        return data
+    except:
+        return data
+
+
 def rediger_rapport(request, typeR):
-    print('dkhalt hna')
     if typeR == 'Extrusion':
-        data = ProductionPlanE.objects.filter(
-            Q(date_created=time.strftime(
-                "%Y-%m-%d", time.localtime()))).values_list('ref', flat=True)
-        context = {'data': data, 'list': len(data), "typeR": typeR}
+        test = 0
+        data = checkRepport(ProductionPlanE, RapportJournalierE, typeR)
+        if data is not None:
+            test = len(data)
+        context = {'data': data, 'list': test, "typeR": typeR}
         return render(request, 'rapport/rediget_rapportE.html', context)
     else:
         if typeR == 'Anodisation':
-            data = ProductionPlanA.objects.filter(
-                Q(date_created=time.strftime(
-                    "%Y-%m-%d", time.localtime()))).values_list('ref',
-                                                                flat=True)
+            data = checkRepport(ProductionPlanA, RapportJournalierA, typeR)
+
         elif typeR == 'LaquageBlanc':
-            data = ProductionPlanLB.objects.filter(
-                Q(date_created=time.strftime(
-                    "%Y-%m-%d", time.localtime()))).values_list('ref',
-                                                                flat=True)
+            data = checkRepport(ProductionPlanLB, RapportJournalierLB, typeR)
+
         elif typeR == 'LaquageCouleur':
-            data = ProductionPlanLC.objects.filter(
-                Q(date_created=time.strftime(
-                    "%Y-%m-%d", time.localtime()))).values_list('ref',
-                                                                flat=True)
+            data = checkRepport(ProductionPlanLC, RapportJournalierLC, typeR)
+
         else:
-            data = ProductionPlanRPT.objects.filter(
-                Q(date_created=time.strftime(
-                    "%Y-%m-%d", time.localtime()))).values_list('ref01',
-                                                                flat=True)
-        context = {'data': data, 'list': len(data), "typeR": typeR}
+            data = checkRepport(ProductionPlanRPT, RapportJournalierRPT, typeR)
+
+        test = 0
+
+        if data is not None:
+            test = len(data)
+        print(data)
+        context = {'data': data, 'list': test, "typeR": typeR}
         return render(request, 'rapport/rediget_rapport.html', context)
 
 
@@ -182,10 +218,39 @@ def savePlaning(request, typeR, longeur, datalength, date_created):
         planing.save()
 
 
+def sauvegarder(rapportExistant, deche_geometrique, nbr_barre, obj,
+                prod_physique, prod_conforme, prod_non_conforme, n_of, realise,
+                prod_physique_p_r):
+
+    if deche_geometrique != None and nbr_barre != None:
+        rapportExistant.deche_geometrique = deche_geometrique
+        rapportExistant.nbr_barre = nbr_barre
+    else:
+        rapportExistant.prod_physique_p_r = prod_physique_p_r
+    rapportExistant.obj = obj
+    rapportExistant.prod_physique = prod_physique
+    rapportExistant.prod_conforme = prod_conforme
+    rapportExistant.prod_non_conforme = prod_non_conforme
+    rapportExistant.n_of = n_of
+    rapportExistant.realise = realise
+    rapportExistant.save()
+
+
 def rapportEALR(request, typeR, data, datalength):
+    if typeR == 'Extrusion':
+        RapportJournalierConcerner = RapportJournalierE
+    elif typeR == 'Anodisation':
+        RapportJournalierConcerner = RapportJournalierA
+    elif typeR == 'LaquageBlanc':
+        RapportJournalierConcerner = RapportJournalierLB
+    elif typeR == 'LaquageCouleur':
+        RapportJournalierConcerner = RapportJournalierLC
+    else:
+        RapportJournalierConcerner = RapportJournalierRPT
 
     for i in range(1, int(datalength) + 1):
         ref = data[i - 1]
+        id = request.POST.get('id-{}'.format(i))
         obj = request.POST['obj-{}'.format(i)]
         prod_physique = request.POST['prod_physique-{}'.format(i)]
         prod_conforme = request.POST['prod_conforme-{}'.format(i)]
@@ -195,58 +260,79 @@ def rapportEALR(request, typeR, data, datalength):
         if realise == 'on':
             realise = 'True'
 
-        if typeR == "Extrusion":
-            deche_geometrique = request.POST['deche_geometrique-{}'.format(i)]
-            nbr_barre = request.POST['nbr_barr-{}'.format(i)]
-            rapport = RapportJournalierE(ref=ref,
-                                         prod_physique=prod_physique,
-                                         obj=obj,
-                                         prod_conforme=prod_conforme,
-                                         prod_non_conforme=prod_non_conforme,
-                                         deche_geometrique=deche_geometrique,
-                                         nbr_barre=nbr_barre,
-                                         n_of=n_of,
-                                         realise=realise)
-        else:
-            prod_physique_p_r = request.POST['prod_physique_p_r-{}'.format(i)]
-            if typeR == 'Anodisation':
-                rapport = RapportJournalierA(
-                    ref=ref,
-                    obj=obj,
-                    prod_physique_p_r=prod_physique_p_r,
-                    prod_physique=prod_physique,
-                    prod_conforme=prod_conforme,
-                    prod_non_conforme=prod_non_conforme,
-                    n_of=n_of)
-            elif typeR == 'LaquageBlanc':
-                rapport = RapportJournalierLB(
-                    ref=ref,
-                    obj=obj,
-                    prod_physique_p_r=prod_physique_p_r,
-                    prod_physique=prod_physique,
-                    prod_conforme=prod_conforme,
-                    prod_non_conforme=prod_non_conforme,
-                    n_of=n_of)
-            elif typeR == 'LaquageCouleur':
-                rapport = RapportJournalierLC(
-                    ref=ref,
-                    obj=obj,
-                    prod_physique_p_r=prod_physique_p_r,
-                    prod_physique=prod_physique,
-                    prod_conforme=prod_conforme,
-                    prod_non_conforme=prod_non_conforme,
-                    n_of=n_of)
-            else:
-                rapport = RapportJournalierRPT(
-                    ref=ref,
-                    obj=obj,
-                    prod_physique_p_r=prod_physique_p_r,
-                    prod_physique=prod_physique,
-                    prod_conforme=prod_conforme,
-                    prod_non_conforme=prod_non_conforme,
-                    n_of=n_of)
+        try:
 
-        rapport.save()
+            rapportExistant = RapportJournalierConcerner.objects.select_related(
+            ).filter(ref=id)
+
+            print('existe  ?: ', len(rapportExistant) > 0)
+            if len(rapportExistant) > 0:
+                if typeR == "Extrusion":
+                    deche_geometrique = request.POST[
+                        'deche_geometrique-{}'.format(i)]
+                    nbr_barre = request.POST['nbr_barr-{}'.format(i)]
+                    print(rapportExistant[0])
+                    sauvegarder(
+                        rapportExistant[0],
+                        deche_geometrique,
+                        nbr_barre,
+                        obj,
+                        prod_physique,
+                        prod_conforme,
+                        prod_non_conforme,
+                        n_of,
+                        realise,
+                        None,
+                    )
+                else:
+                    prod_physique_p_r = request.POST[
+                        'prod_physique_p_r-{}'.format(i)]
+                    sauvegarder(
+                        rapportExistant[0],
+                        None,
+                        None,
+                        obj,
+                        prod_physique,
+                        prod_conforme,
+                        prod_non_conforme,
+                        n_of,
+                        realise,
+                        prod_physique_p_r,
+                    )
+
+            else:
+
+                if typeR == "Extrusion":
+                    deche_geometrique = request.POST[
+                        'deche_geometrique-{}'.format(i)]
+                    nbr_barre = request.POST['nbr_barr-{}'.format(i)]
+
+                    rapport = RapportJournalierConcerner(
+                        ref=ref,
+                        prod_physique=prod_physique,
+                        obj=obj,
+                        prod_conforme=prod_conforme,
+                        prod_non_conforme=prod_non_conforme,
+                        deche_geometrique=deche_geometrique,
+                        nbr_barre=nbr_barre,
+                        n_of=n_of,
+                        realise=realise)
+                else:
+                    prod_physique_p_r = request.POST[
+                        'prod_physique_p_r-{}'.format(i)]
+                    rapport = RapportJournalierConcerner(
+                        ref=ref,
+                        obj=obj,
+                        prod_physique_p_r=prod_physique_p_r,
+                        prod_physique=prod_physique,
+                        prod_conforme=prod_conforme,
+                        prod_non_conforme=prod_non_conforme,
+                        n_of=n_of)
+
+                rapport.save()
+
+        except Exception as e:
+            print(e)
 
 
 def saveRapport(request, typeR):

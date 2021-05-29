@@ -3,7 +3,7 @@ from .models import ProductionPlanE, ProductionPlanLB, ProductionPlanLC, Product
 
 
 class Filter(admin.ModelAdmin):
-    list_display = ('ref', 'qte', 'date_created', 'typeP')
+    list_display = ('id', 'ref', 'qte', 'date_created', 'typeP')
 
 
 admin.site.register(ProductionPlanE, Filter)

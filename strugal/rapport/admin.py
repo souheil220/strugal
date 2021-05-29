@@ -4,13 +4,13 @@ from .models import *
 
 # Register your models here.
 class FilterE(admin.ModelAdmin):
-    list_display = ('ref', 'prod_physique', 'prod_conforme',
+    list_display = ('id', 'ref', 'prod_physique', 'prod_conforme',
                     'prod_non_conforme', 'deche_geometrique', 'nbr_barre',
                     'n_of', 'date_created', 'realise')
 
 
 class FilterALR(admin.ModelAdmin):
-    list_display = ('ref', 'prod_physique_p_r', 'prod_physique',
+    list_display = ('id', 'ref', 'prod_physique_p_r', 'prod_physique',
                     'prod_conforme', 'prod_non_conforme', 'n_of',
                     'date_created', 'realise')
 
