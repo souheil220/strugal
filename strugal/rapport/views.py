@@ -111,19 +111,32 @@ def rapportJ(request, typeR, dateC):
 
             if typeR == 'Extrusion':
                 for i in range(len(data)):
-                    data[i].prod_physique_pou = round(
-                        (((data[i].prod_physique) * 100 / data[i].ref.qte)) *
-                        1000, 2)
-                    data[i].prod_conforme_pou = round(
-                        ((data[i].prod_conforme * 100 /
-                          data[i].prod_physique)), 2)
-                    data[i].prod_non_conforme_pou = round(
-                        ((data[i].prod_non_conforme * 100 /
-                          data[i].prod_physique)), 2)
-                    data[i].deche_geometrique_pou = round(
-                        ((data[i].deche_geometrique * 100 /
-                          data[i].prod_physique)), 2)
+                    if data[i].prod_physique == 0:
+                        data[i].prod_physique_pou = 0
+                        data[i].prod_conforme_pou = 0
+                        data[i].prod_conforme = 0
+                        data[i].prod_non_conforme = 0
+                        data[i].prod_non_conforme_pou = 0
+                        data[i].deche_geometrique = 0
+                        data[i].deche_geometrique_pou = 0
+                        data[i].nbr_barre = 0
+
+                    else:
+
+                        data[i].prod_physique_pou = round(((
+                            (data[i].prod_physique) * 100 / data[i].ref.qte)) *
+                                                          1000, 2)
+                        data[i].prod_conforme_pou = round(
+                            ((data[i].prod_conforme * 100 /
+                              data[i].prod_physique)), 2)
+                        data[i].prod_non_conforme_pou = round(
+                            ((data[i].prod_non_conforme * 100 /
+                              data[i].prod_physique)), 2)
+                        data[i].deche_geometrique_pou = round(
+                            ((data[i].deche_geometrique * 100 /
+                              data[i].prod_physique)), 2)
                 final_data = {}
+
                 i = 0
                 for j in data:
                     final_data[i] = {}
@@ -149,13 +162,23 @@ def rapportJ(request, typeR, dateC):
             else:
                 print('je suis fel else')
                 for i in range(len(data)):
-                    data[i].prod_physique_pou = round(
-                        ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)
-                    data[i].prod_conforme_pou = round(
-                        ((data[i].prod_conforme * 100 / data[i].ref.qte)), 2)
-                    data[i].prod_non_conforme_pou = round(
-                        ((data[i].prod_non_conforme * 100 / data[i].ref.qte)),
-                        2)
+                    if data[i].prod_physique == 0:
+                        data[i].prod_physique_pou = 0
+                        data[i].prod_physique_p_r = 0
+                        data[i].prod_conforme_pou = 0
+                        data[i].prod_conforme = 0
+                        data[i].prod_non_conforme = 0
+                        data[i].prod_non_conforme_pou = 0
+                    else:
+                        data[i].prod_physique_pou = round(
+                            ((data[i].prod_physique * 100 / data[i].ref.qte)),
+                            2)
+                        data[i].prod_conforme_pou = round(
+                            ((data[i].prod_conforme * 100 / data[i].ref.qte)),
+                            2)
+                        data[i].prod_non_conforme_pou = round(
+                            ((data[i].prod_non_conforme * 100 /
+                              data[i].ref.qte)), 2)
                 final_data = {}
                 i = 0
                 print(data[0].prod_physique_pou)
