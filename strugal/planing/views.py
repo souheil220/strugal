@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .forms import ProductFormsetE, ProductFormsetLB, ProductFormsetLC, ProductFormsetRPT, ProductFormsetA
 from .models import ProductionPlanE, ProductionPlanLB, ProductionPlanLC, ProductionPlanRPT, ProductionPlanA
 from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib.auth.decorators import login_required
 import json
 
 
@@ -161,6 +162,7 @@ def getDate(request, date):
     return HttpResponse(json.dumps(event_arr, cls=DjangoJSONEncoder))
 
 
+@login_required(login_url='login')
 def laquageBlanc(request):
     formset = ProductFormsetLB()
     formset = ProductFormsetLB(request.POST or None)
@@ -193,6 +195,7 @@ def laquageBlanc(request):
         })
 
 
+@login_required(login_url='login')
 def anodisation(request):
     formset = ProductFormsetA()
     formset = ProductFormsetA(request.POST or None)
@@ -228,6 +231,7 @@ def anodisation(request):
         })
 
 
+@login_required(login_url='login')
 def laquageCouleur(request):
     formset = ProductFormsetLC()
     formset = ProductFormsetLC(request.POST or None)
@@ -263,6 +267,7 @@ def laquageCouleur(request):
         })
 
 
+@login_required(login_url='login')
 def rpt(request):
     formset = ProductFormsetRPT()
     formset = ProductFormsetRPT(request.POST or None)
@@ -300,6 +305,7 @@ def rpt(request):
         })
 
 
+@login_required(login_url='login')
 def planing(request):
     formset = ProductFormsetE()
     formset = ProductFormsetE(request.POST or None)

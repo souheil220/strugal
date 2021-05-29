@@ -4,6 +4,7 @@ from planing.models import *
 import time
 from .models import *
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from datetime import date
 import json
 
@@ -48,7 +49,7 @@ def checkRepport(productP, reportM, typeR):
     except:
         return data
 
-
+@ login_required(login_url='login')
 def rediger_rapport(request, typeR):
     if typeR == 'Extrusion':
         test = 0
@@ -78,7 +79,7 @@ def rediger_rapport(request, typeR):
         context = {'data': data, 'list': test, "typeR": typeR}
         return render(request, 'rapport/rediget_rapport.html', context)
 
-
+@ login_required(login_url='login')
 def rapportAujourdui(request):
     aujourdhui = date.today().strftime("%Y-%m-%d")
     data = RapportJournalierA.objects.filter(date_created=aujourdhui)
