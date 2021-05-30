@@ -46,7 +46,7 @@
                     <p class="category">Here is a subtitle for this table</p>
                   </div>
                   <div id="table-div" class="card-content table-responsive table-full-width">
-                    <table class="table table-hover table-bordered">
+                    <table id='tabla' class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
@@ -79,6 +79,8 @@
                         </tr>
                         {% endfor %}
                       </tbody>
+                      <tfoot>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -92,10 +94,20 @@
   </body>
   
   <script>
+   
+   
+    $('#1').after('<td rowspan="{{data|length}}">{{data.0.obj}}</td>');
+    $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{data.0.prod_physique}}</td><td rowspan="{{data|length|add:'1'}}">{{data.0.prod_physique_pou}}%</td>`)
+    $('#tabla tr:last').after(` <tr>
+                    <td colspan="2">Total</td>
+                    <td>{{data.0.prod_physique}}</td>
+                    <td>{{totalPC}}</td>
+                    <td>{{totalPCP}}%</td>
+                    <td>{{totalPNC}}</td>
+                    <td>{{totalPNCP}}%</td>
+                        </tr>`);
+   
     
-    $('#1').after('<td rowspan={{data|length}}>{{data.0.obj}}</td>');
-    $('#ppr').after('<td rowspan={{data|length}}> {{data.0.prod_physique}}</td><td rowspan={{data|length}}>{{data.0.prod_physique_pou}}%</td>')
-  
   </script>
 
   
@@ -134,7 +146,7 @@
            var new_content = ''
            if (type !== 'Extrusion'){
              console.log(response['final_data'])
-            new_content = `<table class="table table-hover table-bordered">
+            new_content = `<table id='tabla' class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
@@ -175,16 +187,23 @@
                     table.replaceWith(new_content)
                     try {
                         
-                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'(T)</td>');
-                        $('#ppr').after('<td rowspan='+len+'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+len+'>'+response['final_data'][0]["prod_physique_pou"]+'%</td>')
-                       
+                        $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                        $('#ppr').after('<td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response['final_data'][0]["prod_physique_pou"]+'%</td>')
+                        $('#tabla tr:last').after(`<tr>
+                    <td colspan="2">Total</td>
+                    <td>{{data.0.prod_physique}}</td>
+                    <td>{{totalPC}}</td>
+                    <td>{{totalPCP}}%</td>
+                    <td>{{totalPNC}}</td>
+                    <td>{{totalPNCP}}%</td>
+                        </tr>`);
   
                     } catch (error) {
                         console.log('no data')
                     }
            }
            else{
-            new_content = `<table class="table table-hover table-bordered">
+            new_content = `<table id ="tabla" class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
@@ -231,7 +250,19 @@
                     len =  $('#data').val()
                     try {
                         
-                        $('#1').after('<td rowspan='+len+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                        $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                        $('#tabla tr:last').after(`<tr>
+                    <td colspan="2">Total</td>
+                    <td>`+response['totalPP']+`</td>
+                    <td>`+response['totalPPP']+`%</td>
+                    <td>`+response['totalPC']+`</td>
+                    <td>`+response['totalPPC']+`%</td>
+                    <td>`+response['totalPNC']+`</td>
+                    <td>`+response['totalPPNC']+`%</td>
+                    <td>`+response['totalDG']+`</td>
+                    <td>`+response['totalDGP']+`%</td>
+                    <td>`+response['totalNBR']+`</td>
+                        </tr>`);
                     } catch (error) {
                         console.log('no data')
                     }

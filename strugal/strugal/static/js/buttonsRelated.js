@@ -255,7 +255,7 @@ $('#add-one-more-ex').click(function () {
   </td>
   <td>
     <input
-      type="number"
+      type="text"
       name="n_of-` + (parseInt(len) + 1).toString() + `"
       step="any"
       class="form-control"
@@ -342,7 +342,7 @@ $('#add-one-more').click(function () {
   
   <td>
     <input
-      type="number"
+      type="text"
       name="n_of-` + (parseInt(len) + 1).toString() + `"
       step="any"
       class="form-control"

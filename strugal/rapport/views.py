@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from datetime import date
 import json
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -49,7 +50,8 @@ def checkRepport(productP, reportM, typeR):
     except:
         return data
 
-@ login_required(login_url='login')
+
+@login_required(login_url='login')
 def rediger_rapport(request, typeR):
     if typeR == 'Extrusion':
         test = 0
@@ -79,19 +81,35 @@ def rediger_rapport(request, typeR):
         context = {'data': data, 'list': test, "typeR": typeR}
         return render(request, 'rapport/rediget_rapport.html', context)
 
-@ login_required(login_url='login')
+
+@login_required(login_url='login')
 def rapportAujourdui(request):
     aujourdhui = date.today().strftime("%Y-%m-%d")
     data = RapportJournalierA.objects.filter(date_created=aujourdhui)
-    for i in range(len(data)):
-        data[i].prod_physique_pou = round(
-            ((data[i].prod_physique * 100 / data[i].ref.qte)), 2)
-        data[i].prod_conforme_pou = round(
-            ((data[i].prod_conforme * 100 / data[i].ref.qte)), 2)
-        data[i].prod_non_conforme_pou = round(
-            ((data[i].prod_non_conforme * 100 / data[i].ref.qte)), 2)
 
-    context = {"data": data}
+    data[0].prod_physique = RapportJournalierA.objects.filter(
+        date_created=aujourdhui).aggregate(Sum('prod_physique_p_r'))
+    totalPC, totalPCP, totalPNC, totalPNCP = 0, 0, 0, 0
+    for i in range(len(data)):
+        data[0].prod_physique_pou = round(
+            ((data[0].prod_physique * 100 / data[0].obj)), 2)
+        data[i].prod_conforme_pou = round(
+            ((data[i].prod_physique_p_r * 100 / data[i].prod_physique_p_r)), 2)
+        data[i].prod_non_conforme_pou = 100 - data[i].prod_conforme_pou
+        totalPC = totalPC + data[i].prod_conforme
+        totalPCP = totalPCP + data[i].prod_conforme_pou
+        totalPNC = totalPNC + data[i].prod_non_conforme
+        totalPNCP = totalPNCP + data[i].prod_non_conforme_pou
+    totalPCP = totalPCP / (i + 1)
+    totalPNCP = totalPNCP / (i + 1)
+
+    context = {
+        "data": data,
+        "totalPC": totalPC,
+        "totalPCP": totalPCP,
+        "totalPNC": totalPNC,
+        "totalPNCP": totalPNCP
+    }
     return render(request, 'rapport/rapportAujourdui.html', context)
 
 
@@ -100,17 +118,32 @@ def rapportJ(request, typeR, dateC):
     if request.is_ajax and request.method == 'GET':
         try:
             if typeR == 'Anodisation':
+                rapport = RapportJournalierA
                 data = RapportJournalierA.objects.filter(date_created=dateC)
             elif typeR == 'Extrusion':
                 data = RapportJournalierE.objects.filter(date_created=dateC)
             elif typeR == 'Language Blanc':
+                rapport = RapportJournalierLB
                 data = RapportJournalierLB.objects.filter(date_created=dateC)
             elif typeR == 'Language Couleur':
+                rapport = RapportJournalierLC
                 data = RapportJournalierLC.objects.filter(date_created=dateC)
             else:
+                rapport = RapportJournalierRPT
                 data = RapportJournalierRPT.objects.filter(date_created=dateC)
 
             if typeR == 'Extrusion':
+                totalPP = RapportJournalierE.objects.filter(
+                    date_created=dateC).aggregate(Sum('prod_physique'))
+                totalPC = RapportJournalierE.objects.filter(
+                    date_created=dateC).aggregate(Sum('prod_conforme'))
+                totalPNCP = RapportJournalierE.objects.filter(
+                    date_created=dateC).aggregate(Sum('prod_non_conforme'))
+                totalDG = RapportJournalierE.objects.filter(
+                    date_created=dateC).aggregate(Sum('deche_geometrique'))
+                totalNBR = RapportJournalierE.objects.filter(
+                    date_created=dateC).aggregate(Sum('nbr_barre'))
+
                 for i in range(len(data)):
                     if data[i].prod_physique == 0:
                         data[i].prod_physique_pou = 0
@@ -124,9 +157,11 @@ def rapportJ(request, typeR, dateC):
 
                     else:
 
-                        data[i].prod_physique_pou = round(((
-                            (data[i].prod_physique) * 100 / data[i].ref.qte)) *
-                                                          1000, 2)
+                        data[i].prod_physique_pou = round(
+                            ((data[i].prod_conforme + data[i].prod_non_conforme
+                              + data[i].deche_geometrique) * 100 /
+                             data[i].obj), 2)
+
                         data[i].prod_conforme_pou = round(
                             ((data[i].prod_conforme * 100 /
                               data[i].prod_physique)), 2)
@@ -136,6 +171,9 @@ def rapportJ(request, typeR, dateC):
                         data[i].deche_geometrique_pou = round(
                             ((data[i].deche_geometrique * 100 /
                               data[i].prod_physique)), 2)
+                        print(data[i].prod_physique_pou)
+                        print(data[i].prod_conforme, data[i].prod_non_conforme,
+                              data[i].deche_geometrique)
                 final_data = {}
 
                 i = 0
@@ -143,9 +181,10 @@ def rapportJ(request, typeR, dateC):
                     final_data[i] = {}
                     print(j.ref.ref)
                     final_data[i]['ref'] = j.ref.ref
-                    final_data[i]['obj'] = "7"
+                    final_data[i]['obj'] = j.obj
                     final_data[i]['prod_physique'] = j.prod_physique
-                    final_data[i]['prod_physique_pou'] = j.prod_physique_pou
+                    final_data[i]['prod_physique_pou'] = data[
+                        i].prod_physique_pou
                     final_data[i]['prod_conforme'] = j.prod_conforme
                     final_data[i]['prod_conforme_pou'] = j.prod_conforme_pou
                     final_data[i]['prod_non_conforme'] = j.prod_non_conforme
@@ -159,9 +198,34 @@ def rapportJ(request, typeR, dateC):
                     final_data[i]['date_created'] = j.date_created
                     i += 1
                 print("final_data ", final_data)
-                context = {"final_data": final_data}
+                totalPPP = round(
+                    totalPP['prod_physique__sum'] * 100 / data[0].obj, 2)
+                totalPPC = round(
+                    totalPC['prod_conforme__sum'] * 100 /
+                    totalPP['prod_physique__sum'], 2)
+                totalPPNC = round(
+                    totalPNCP['prod_non_conforme__sum'] * 100 /
+                    totalPP['prod_physique__sum'], 2)
+                totalDGP = round(
+                    totalDG['deche_geometrique__sum'] * 100 /
+                    totalPP['prod_physique__sum'], 2)
+                context = {
+                    "final_data": final_data,
+                    "totalPP": totalPP['prod_physique__sum'],
+                    "totalPC": totalPC['prod_conforme__sum'],
+                    "totalPNC": totalPNCP['prod_non_conforme__sum'],
+                    "totalDG": totalDG['deche_geometrique__sum'],
+                    "totalNBR": totalNBR['nbr_barre__sum'],
+                    "totalPPP": totalPPP,
+                    "totalPPC": totalPPC,
+                    "totalPPNC": totalPPNC,
+                    "totalDGP": totalDGP,
+                }
             else:
+                data[0].prod_physique = rapport.objects.filter(
+                    date_created=dateC).aggregate(Sum('prod_physique_p_r'))
                 print('je suis fel else')
+                totalPC, totalPCP, totalPNC, totalPNCP = 0, 0, 0, 0
                 for i in range(len(data)):
                     if data[i].prod_physique == 0:
                         data[i].prod_physique_pou = 0
@@ -171,27 +235,33 @@ def rapportJ(request, typeR, dateC):
                         data[i].prod_non_conforme = 0
                         data[i].prod_non_conforme_pou = 0
                     else:
-                        data[i].prod_physique_pou = round(
-                            ((data[i].prod_physique * 100 / data[i].ref.qte)),
-                            2)
+                        data[0].prod_physique_pou = round(
+                            ((data[0].prod_physique * 100 / data[0].obj)), 2)
                         data[i].prod_conforme_pou = round(
-                            ((data[i].prod_conforme * 100 / data[i].ref.qte)),
-                            2)
-                        data[i].prod_non_conforme_pou = round(
-                            ((data[i].prod_non_conforme * 100 /
-                              data[i].ref.qte)), 2)
+                            ((data[i].prod_physique_p_r * 100 /
+                              data[i].prod_physique_p_r)), 2)
+                        data[i].prod_non_conforme_pou = 100 - data[
+                            i].prod_conforme_pou
+
+                        totalPC = totalPC + data[i].prod_conforme
+                        totalPCP = totalPCP + data[i].prod_conforme_pou
+                        totalPNC = totalPNC + data[i].prod_non_conforme
+                        totalPNCP = totalPNCP + data[i].prod_non_conforme_pou
+                totalPCP = totalPCP / (i + 1)
+                totalPNCP = totalPNCP / (i + 1)
+                print(totalPC, totalPCP, totalPNC, totalPNCP)
                 final_data = {}
                 i = 0
-                print(data[0].prod_physique_pou)
                 for j in data:
                     final_data[i] = {}
                     print(j.ref.ref)
                     final_data[i]['ref'] = j.ref.ref
-                    final_data[i]['obj'] = "7"
+                    final_data[i]['obj'] = j.obj
                     final_data[i]['prod_physique'] = j.prod_physique
                     final_data[i][
                         'prod_physique_par_ref'] = j.prod_physique_p_r
-                    final_data[i]['prod_physique_pou'] = j.prod_physique_pou
+                    final_data[i]['prod_physique_pou'] = data[
+                        0].prod_physique_pou
                     final_data[i]['prod_conforme'] = j.prod_conforme
                     final_data[i]['prod_conforme_pou'] = j.prod_conforme_pou
                     final_data[i]['prod_non_conforme'] = j.prod_non_conforme
@@ -200,10 +270,18 @@ def rapportJ(request, typeR, dateC):
                     final_data[i]['n_of'] = j.n_of
                     final_data[i]['date_created'] = j.date_created
                     i += 1
-                print("final_data ", final_data)
-                context = {"final_data": final_data}
+                    print("final_data ", final_data)
+                context = {
+                    "final_data": final_data,
+                    "totalPC": totalPC,
+                    "totalPCP": totalPCP,
+                    "totalPNC": totalPNC,
+                    "totalPNCP": totalPNCP,
+                    "len": len(data)
+                }
 
-        except:
+        except Exception as e:
+            print(e)
             context = {"final_data": {}}
 
         return HttpResponse(json.dumps(context),
@@ -359,8 +437,7 @@ def rapportEALR(request, typeR, data, datalength):
             print(e)
 
 
-def saveRapport(request, typeR):
-    date_created = time.strftime("%Y-%m-%d", time.localtime())
+def get_data(typeR, date_created):
     if typeR == 'Extrusion':
         data = ProductionPlanE.objects.filter(Q(date_created=date_created))
     elif typeR == 'Anodisation':
@@ -371,6 +448,12 @@ def saveRapport(request, typeR):
         data = ProductionPlanLC.objects.filter(Q(date_created=date_created))
     else:
         data = ProductionPlanRPT.objects.filter(Q(date_created=date_created))
+    return data
+
+
+def saveRapport(request, typeR):
+    date_created = time.strftime("%Y-%m-%d", time.localtime())
+    data = get_data(typeR, date_created)
 
     if request.method == "POST":
         datalength = request.POST['datalength']
@@ -386,6 +469,7 @@ def saveRapport(request, typeR):
             savePlaning(request, typeR, longeur,
                         int(datalength) + 1, date_created)
 
-            rapportEALR(request, typeR, data, datalength)
+            rapportEALR(request, typeR, get_data(typeR, date_created),
+                        datalength)
 
         return redirect('rapportAujourdui')
