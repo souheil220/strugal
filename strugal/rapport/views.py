@@ -85,32 +85,46 @@ def rediger_rapport(request, typeR):
 @login_required(login_url='login')
 def rapportAujourdui(request):
     aujourdhui = date.today().strftime("%Y-%m-%d")
-    data = RapportJournalierA.objects.filter(date_created=aujourdhui)
 
-    data[0].prod_physique = RapportJournalierA.objects.filter(
-        date_created=aujourdhui).aggregate(Sum('prod_physique_p_r'))
-    totalPC, totalPCP, totalPNC, totalPNCP = 0, 0, 0, 0
-    for i in range(len(data)):
-        data[0].prod_physique_pou = round(
-            ((data[0].prod_physique * 100 / data[0].obj)), 2)
-        data[i].prod_conforme_pou = round(
-            ((data[i].prod_physique_p_r * 100 / data[i].prod_physique_p_r)), 2)
-        data[i].prod_non_conforme_pou = 100 - data[i].prod_conforme_pou
-        totalPC = totalPC + data[i].prod_conforme
-        totalPCP = totalPCP + data[i].prod_conforme_pou
-        totalPNC = totalPNC + data[i].prod_non_conforme
-        totalPNCP = totalPNCP + data[i].prod_non_conforme_pou
-    totalPCP = totalPCP / (i + 1)
-    totalPNCP = totalPNCP / (i + 1)
+    try:
+        data = RapportJournalierA.objects.filter(date_created=aujourdhui)
+        if (len(data) > 0):
+            data[0].prod_physique = RapportJournalierA.objects.filter(
+                date_created=aujourdhui).aggregate(Sum('prod_physique_p_r'))
+            totalPC, totalPCP, totalPNC, totalPNCP = 0, 0, 0, 0
+            for i in range(len(data)):
+                data[0].prod_physique_pou = round(
+                    ((data[0].prod_physique * 100 / data[0].obj)), 2)
+                data[i].prod_conforme_pou = round(
+                    ((data[i].prod_physique_p_r * 100 /
+                      data[i].prod_physique_p_r)), 2)
+                data[i].prod_non_conforme_pou = 100 - data[i].prod_conforme_pou
+                totalPC = totalPC + data[i].prod_conforme
+                totalPCP = totalPCP + data[i].prod_conforme_pou
+                totalPNC = totalPNC + data[i].prod_non_conforme
+                totalPNCP = totalPNCP + data[i].prod_non_conforme_pou
+            totalPCP = totalPCP / (i + 1)
+            totalPNCP = totalPNCP / (i + 1)
+            context = {
+                "data": data,
+                "totalPC": totalPC,
+                "totalPCP": totalPCP,
+                "totalPNC": totalPNC,
+                "totalPNCP": totalPNCP
+            }
+            return render(request, 'rapport/rapportAujourdui.html', context)
+        else:
+            context = {
+                "data": data,
+                "totalPC": "",
+                "totalPCP": "",
+                "totalPNC": "",
+                "totalPNCP": ""
+            }
+            return render(request, 'rapport/rapportAujourdui.html', context)
 
-    context = {
-        "data": data,
-        "totalPC": totalPC,
-        "totalPCP": totalPCP,
-        "totalPNC": totalPNC,
-        "totalPNCP": totalPNCP
-    }
-    return render(request, 'rapport/rapportAujourdui.html', context)
+    except Exception as e:
+        print(e)
 
 
 def rapportJ(request, typeR, dateC):
