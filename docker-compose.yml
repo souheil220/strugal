@@ -5,10 +5,10 @@ services:
     build:
       context: .
     ports:
-      - "8000:8000"
+      - "8002:8000"
     volumes:
       - ./:/strugal
-    container_name: strugalproject
+    container_name: DAILYGESTION_APP
     command: >
       sh -c " cd strugal &&
             python manage.py makemigrations &&
@@ -24,9 +24,10 @@ services:
 
   db:
     image: postgres:13-alpine
+    container_name: DAILYGESTION_DB
     environment:
       - POSTGRES_DB=mydb-dev
       - POSTGRES_USER=vinhle
       - POSTGRES_PASSWORD=password
     ports:
-      - "5432:5432"
+      - "5434:5432"
