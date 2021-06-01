@@ -77,12 +77,10 @@ WSGI_APPLICATION = 'strugal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        # 'HOST': os.environ.get('DB_HOST'),
-        'HOST': '10.20.10.18',
+        'HOST': os.environ.get('DB_HOST'),
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
-        'PORT': '5434'
     }
 }
 
