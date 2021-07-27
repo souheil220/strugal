@@ -20,7 +20,7 @@ $("#calendar").fullCalendar({
 
       $("#updateModal").modal("show");
 
-
+      normal(test, calEvent, url)
 
       if (url === 'anodisation' || url === 'laquageCouleur') {
         anodisationLC(test, calEvent, url)
@@ -39,26 +39,26 @@ $("#calendar").fullCalendar({
 
 
   dayClick: async function (date, jsEvent, view, ) {
-    var events = await getEventOfDay(date.format())
-    var today = aujourdhui()
     if (url === 'anodisation') {
-      dayClickALC(date, today, events)
-      // anodisationLC(test, calEvent, 'anodisation')
-    } else if (url === 'laquageCouleur') {
-      dayClickALC(date, today, events)
-
+      var events = await getEventOfDay(date.format(), 'anodisation')
     } else if (url === 'rpt') {
-      dayClickRPT(date, today, events)
-
+      var events = await getEventOfDay(date.format(), 'rpt')
+    } else if (url === 'laquageCouleur') {
+      var events = await getEventOfDay(date.format(), 'laquageCouleur')
+    } else if (url === 'laquageBlanc') {
+      var events = await getEventOfDay(date.format(), 'laquageBlanc')
     } else {
-      dayClickLBE(date, today, events)
+      url = "extrusion"
+      var events = await getEventOfDay(date.format(), 'extrusion')
     }
+    console.log(events)
+    var today = aujourdhui()
+    dayClickP(date, today, events, url)
 
   },
 
 });
 
-// rani habes hna 
 
 function dayClickALC(date, today, events) {
   $("#id_form-0-ref").val("");
@@ -66,7 +66,7 @@ function dayClickALC(date, today, events) {
   $("#id_form-0-ral").val("");
 
   if (today <= date.format()) {
-    $('#add_more').show()
+    // $('#add_more').show()
     $("#inquiryModal").modal("show");
 
     //pour regler le probleme des id répliquer concernant le nombre de form
@@ -182,6 +182,12 @@ function dayClickALC(date, today, events) {
   }
 }
 
+$('#inquiryModal').on('hidden.bs.modal', function (e) {
+  console.log('inquiryModal was hidden')
+  $('.suplementaire').each(function (e) {
+    $(this).remove()
+  })
+})
 
 function dayClickRPT(date, today, events) {
   $("#id_form-0-ref").val("");
@@ -343,8 +349,8 @@ function dayClickRPT(date, today, events) {
   }
 }
 
-function dayClickLBE(date, today, events) {
-
+function dayClickP(date, today, events, url) {
+  console.log("events " + events)
   $("#id_form-0-ref").val("");
   $("#id_form-0-qte").val("");
   var today = aujourdhui()
@@ -406,11 +412,17 @@ function dayClickLBE(date, today, events) {
       name="form-0-date_created"
       id="id_form-0-date_created"
   />
+  <input
+      type="hidden"
+      name="form-0-typeP"
+      id="id_form-0-typeP"
+  />
   </div></div>`).insertBefore('#turningPoint')
 
 
     $("#jour").val(date.format())
     $('#id_form-0-date_created').val($("#jour").val())
+    $('#id_form-0-typeP').val(url)
 
     $("#inquiryModal").submit(function (event) {
       var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
@@ -464,12 +476,12 @@ function aujourdhui() {
   return today
 }
 
-async function getEventOfDay(day) {
+async function getEventOfDay(day, typeP) {
 
   var json
   try {
     json = await $.ajax({
-      url: `/planing/getdate/${day}`,
+      url: `/planing/getdate/${day}/${typeP}`,
       type: "GET",
       cache: false,
       contentType: false,

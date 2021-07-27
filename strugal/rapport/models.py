@@ -5,8 +5,8 @@ import time
 
 class RapportJournalierE(models.Model):
     id = models.AutoField(primary_key=True)
-    ref = models.ForeignKey(ProductionPlanE, on_delete=models.CASCADE)
-    obj = models.FloatField(default=0)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
+    obj = models.FloatField(default=7)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()
     prod_non_conforme = models.FloatField()
@@ -24,8 +24,8 @@ class RapportJournalierE(models.Model):
 
 class RapportJournalierA(models.Model):
     id = models.AutoField(primary_key=True)
-    ref = models.ForeignKey(ProductionPlanA, on_delete=models.CASCADE)
-    obj = models.FloatField(default=0)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
+    obj = models.FloatField(default=0.2)
     prod_physique_p_r = models.FloatField(default=0)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()
@@ -42,8 +42,8 @@ class RapportJournalierA(models.Model):
 
 class RapportJournalierLB(models.Model):
     id = models.AutoField(primary_key=True)
-    ref = models.ForeignKey(ProductionPlanLB, on_delete=models.CASCADE)
-    obj = models.FloatField(default=0)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
+    obj = models.FloatField(default=1.5)
     prod_physique_p_r = models.FloatField(default=0)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()
@@ -60,8 +60,8 @@ class RapportJournalierLB(models.Model):
 
 class RapportJournalierLC(models.Model):
     id = models.AutoField(primary_key=True)
-    ref = models.ForeignKey(ProductionPlanLC, on_delete=models.CASCADE)
-    obj = models.FloatField(default=0)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
+    obj = models.FloatField(default=0.35)
     prod_physique_p_r = models.FloatField(default=0)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()
@@ -78,8 +78,8 @@ class RapportJournalierLC(models.Model):
 
 class RapportJournalierRPT(models.Model):
     id = models.AutoField(primary_key=True)
-    ref = models.ForeignKey(ProductionPlanRPT, on_delete=models.CASCADE)
-    obj = models.FloatField(default=0)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
+    obj = models.FloatField(default=0.15)
     prod_physique_p_r = models.FloatField(default=0)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()

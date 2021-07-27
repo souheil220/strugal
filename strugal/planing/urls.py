@@ -12,5 +12,5 @@ urlpatterns = [
     path("a", views.events, name="events"),
     path("update/<str:pk>", views.update, name="update"),
     path("delete/<str:pk>", views.delete, name="delete"),
-    path("getdate/<str:date>", views.getDate, name="getdate"),
+    path("getdate/<str:date>/<str:typeP>", views.getDate, name="getdate"),
 ]

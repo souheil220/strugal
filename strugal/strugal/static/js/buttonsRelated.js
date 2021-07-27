@@ -1,10 +1,11 @@
 var url = window.location.href
 url = url.substring(30)
 
+
 function wichDiv(number) {
   if (url === 'anodisation' || url === 'laquageCouleur') {
     return `
-    <div id='div-num-` + number + ` style="padding-bottom: 5%;"'>
+    <div id='div-num-` + number + `'class="suplementaire" style="padding-bottom: 5%;">
     <hr>
     <div class="input-group">
     <span class="input-group-addon">Ref</span>
@@ -41,12 +42,14 @@ function wichDiv(number) {
           id="id_form-` + number + `-qte"
         />
     </div>
+    <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
     <div class="closeButton" id='test'><div class='remove' id='remove_` +
       number +
       `'>&times;</div></div>
     </div>`
   } else if (url === 'rpt') {
-    return `<div id='div-num-` + number + `' style="padding-bottom: 5%;">
+    return `<div id='div-num-` + number + `' class="suplementaire" style="padding-bottom: 5%;">
+    <hr>
     <div class="input-group ">
         
           <span class="input-group-addon">Ref01</span>
@@ -111,12 +114,14 @@ function wichDiv(number) {
           id="id_form-` + number + `-qte"
         />
     </div>
+    <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
     <div class="closeButton" id='test'><div class='remove' id='remove_` +
       number +
       `'>&times;</div></div>
     </div>`
   } else {
-    return `<div id='div-num-` + number + `'style="padding-bottom: 5%;">
+    return `<div id='div-num-` + number + `' class="suplementaire"'style="padding-bottom: 5%;">
+    <hr>
   <div class="input-group">
       
         <span class="input-group-addon">Ref</span>
@@ -142,6 +147,7 @@ function wichDiv(number) {
         id="id_form-` + number + `-qte"
       />
   </div>
+  <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
   <div class="closeButton" id='test'>
   <i class='ti-trash remove'id='remove_` +
       number +
@@ -151,16 +157,11 @@ function wichDiv(number) {
   }
 }
 
-
-
-
 $("#add_more").click(function () {
   $("#removeit").attr('disabled', false);
   var form_idx = $("#id_form-TOTAL_FORMS").val();
 
-  $(wichDiv(form_idx).replace(
-    /__prefix__/g,
-    form_idx)).insertBefore('#turningPoint');
+  $(wichDiv(form_idx)).insertBefore('#turningPoint');
   $("#id_form-TOTAL_FORMS").val(parseInt(form_idx) + 1);
 
 

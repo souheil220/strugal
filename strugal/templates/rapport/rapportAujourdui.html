@@ -97,10 +97,10 @@
    
    
     $('#1').after('<td rowspan="{{data|length}}">{{data.0.obj}}</td>');
-    $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{data.0.prod_physique}}</td><td rowspan="{{data|length|add:'1'}}">{{data.0.prod_physique_pou}}%</td>`)
+    $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{data.0.prod_physique.prod_physique_p_r__sum}}</td><td rowspan="{{data|length|add:'1'}}">{{data.0.prod_physique_pou}}%</td>`)
     $('#tabla tr:last').after(` <tr>
                     <td colspan="2">Total</td>
-                    <td>{{data.0.prod_physique}}</td>
+                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
                     <td>{{totalPC}}</td>
                     <td>{{totalPCP}}%</td>
                     <td>{{totalPNC}}</td>
@@ -191,7 +191,7 @@
                         $('#ppr').after('<td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response['final_data'][0]["prod_physique_pou"]+'%</td>')
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
-                    <td>{{data.0.prod_physique}}</td>
+                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
                     <td>{{totalPC}}</td>
                     <td>{{totalPCP}}%</td>
                     <td>{{totalPNC}}</td>

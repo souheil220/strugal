@@ -87,6 +87,7 @@
               </a>
               <div class="collapse in" id="dashboardOverview">
               {% with request.resolver_match.url_name as url_name %}
+                
                 <ul class="nav">
                   <li {% if url_name == 'anodisation' %}class="active"{% endif %}>
                     <a href="{% url 'anodisation' %}">
@@ -159,32 +160,32 @@
               
                 <ul class="nav">
                   
-                  <li {% if 'Anodisation' in request.path %}class="active"{% endif %}>
+                  <li {% if 'rapportR/Anodisation' in request.path %}class="active"{% endif %}>
                     <a href='{% url "rapport" typeR="Anodisation" %}'>
                       <span class="sidebar-mini">A</span>
                       <span class="sidebar-normal">Anodisation</span>
                     </a>
                   </li>
-                  <li {% if 'Extrusion' in request.path %}class="active"{% endif %}>
+                  <li {% if 'rapportR/Extrusion' in request.path %}class="active"{% endif %}>
                     <a href='{% url "rapport" typeR="Extrusion" %}'>
                       <span class="sidebar-mini">E</span>
                       <span class="sidebar-normal">Extrusion</span>
                     </a>
                   </li>
-                  <li {% if 'Blanc' in request.path %}class="active"{% endif %}>
+                  <li {% if 'apportR/LaquageBlanc' in request.path %}class="active"{% endif %}>
                     <a href='{% url "rapport"  typeR="LaquageBlanc" %}'>
                       <span class="sidebar-mini">LB</span>
                       <span class="sidebar-normal">Laquage Blanc</span>
                     </a>
                   </li>
                  
-                  <li {% if 'Couleur' in request.path %}class="active"{% endif %}>
+                  <li {% if 'rapportR/LaquageCouleur' in request.path %}class="active"{% endif %}>
                     <a href='{% url "rapport" typeR="LaquageCouleur" %}'>
                       <span class="sidebar-mini">LC</span>
                       <span class="sidebar-normal">Laquage Couleur</span>
                     </a>
                   </li>
-                  <li {% if 'RPT' in request.path %}class="active"{% endif %}>
+                  <li {% if 'rapportR/RPT' in request.path %}class="active"{% endif %}>
                     <a href='{% url "rapport" typeR="RPT" %}'>
                       <span class="sidebar-mini">R</span>
                       <span class="sidebar-normal">RPT</span>
