@@ -290,16 +290,7 @@ $('#add-one-more').click(function () {
       id="id_ref-` + (parseInt(len) + 1).toString() + `"   
     />
   </td>
-  <td>
-    <input
-      type="text"
-      name="obj-` + ((parseInt(len) + 1).toString()) +
-    `"
-      step="any"
-      class="form-control"
-      id="id_obj-` + (parseInt(len) + 1).toString() + `"   
-    />
-  </td>
+  
   <td>
     <input
       type="number"

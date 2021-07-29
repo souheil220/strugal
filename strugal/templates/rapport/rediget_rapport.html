@@ -20,7 +20,6 @@
                 <thead>
                   <tr>
                     <th scope="col">Ref</th>
-                    <th scope="col">Objectif</th>
                     <th scope="col">Prod physique par Ref</th>
                     <th scope="col">Prod physique</th>
                     <th scope="col">Prod conforme</th>
@@ -44,17 +43,6 @@
                         readonly
                       />
                     </td>
-                    <td rowspan="{{ forloop.counter }}">
-                        <input
-                          type="number"
-                          name="obj-{{ forloop.counter }}"
-                          step="any"
-                          class="form-control"
-                          required=""
-                          id="id_obj-{{ forloop.counter }}"
-                          value="{{d.obj}}"
-                        />
-                      </td>
                       <td>
                         <input
                           type="number"

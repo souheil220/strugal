@@ -768,7 +768,7 @@ demo = {
 
   },
 
-  showSwal: function (type) {
+  showSwal: function (type, message) {
     if (type == 'basic') {
       swal({
         title: "Here's a message!",
@@ -782,6 +782,20 @@ demo = {
         text: "It's pretty, isn't it?",
         buttonsStyling: false,
         confirmButtonClass: "btn btn-info btn-fill"
+      });
+    } else if (type == 'error-message') {
+      if (message !== undefined) {
+        var text = message
+      } else {
+        var text = "It's pretty, isn't it?"
+      }
+      swal({
+
+        title: "Erreur",
+        text: text,
+        buttonsStyling: false,
+        confirmButtonClass: "btn btn-info btn-fill",
+        type: 'error',
       });
 
     } else if (type == 'success-message') {

@@ -34,7 +34,6 @@
 
       $form = $(this);
       var formData = new FormData(this);
-      console.log(formData);
       $.ajax({
         url: "/planing/",
         type: "POST",
@@ -55,7 +54,6 @@
 
       $form = $(this);
       var formData = new FormData(this);
-      console.log(formData);
       $.ajax({
         url: `/planing/update/${$("#id").val()}`,
         type: "POST",
@@ -69,5 +67,6 @@
       });
     });
   </script>
+   
    </body>
 </html>

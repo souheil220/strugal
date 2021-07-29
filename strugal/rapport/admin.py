@@ -12,7 +12,15 @@ class FilterE(admin.ModelAdmin):
 class FilterALR(admin.ModelAdmin):
     list_display = ('id', 'ref', 'prod_physique_p_r', 'prod_physique',
                     'prod_conforme', 'prod_non_conforme', 'n_of',
-                    'date_created', 'realise')
+                    'date_created', 'realise', 'typeR')
+
+
+class FilterTypeR(admin.ModelAdmin):
+    list_display = ('id', 'value')
+
+
+class FilterObjectif(admin.ModelAdmin):
+    list_display = ('id', 'value')
 
     # def get_ref(self, obj):
     #     return obj.ref.ref
@@ -22,7 +30,6 @@ class FilterALR(admin.ModelAdmin):
 
 
 admin.site.register(RapportJournalierE, FilterE)
-admin.site.register(RapportJournalierA, FilterALR)
-admin.site.register(RapportJournalierLB, FilterALR)
-admin.site.register(RapportJournalierLC, FilterALR)
-admin.site.register(RapportJournalierRPT, FilterALR)
+admin.site.register(RapportJournalierALR, FilterALR)
+admin.site.register(TypeRapport, FilterTypeR)
+admin.site.register(Objectif, FilterObjectif)

@@ -69,7 +69,7 @@
                       <tbody>
                         {% for d in data %}
                         <tr>
-                          <td id='{{ forloop.counter }}'>{{d.ref.ref}}</td>
+                          <td id='{{ forloop.counter }}'>{{d.ref}}</td>
                           <td id='ppr'>{{d.prod_physique_p_r}}</td>
                           <td>{{d.prod_conforme}}</td>
                           <td>{{d.prod_conforme_pou}}%</td>
@@ -250,7 +250,7 @@
                     len =  $('#data').val()
                     try {
                         
-                        $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                      $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
                     <td>`+response['totalPP']+`</td>
@@ -273,7 +273,9 @@
           },
         });
   }
-   $('input[type=radio]').change(function(e) {
+
+
+  $('input[type=radio]').change(function(e) {
         if (this.id == 'radio1') {
           change_page("Anodisation")
         } 
