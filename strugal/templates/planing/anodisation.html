@@ -49,26 +49,6 @@
     {% include 'partials/modal.html' %}
  
   {% include 'partials/footer.html' %}
-  <script>
-    $("#myForm").submit(function (e) {
-      e.preventDefault();
-
-      $form = $(this);
-      var formData = new FormData(this);
-      console.log(formData);
-      $.ajax({
-        url: "/planing/anodisation",
-        type: "POST",
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-          console.log(formData);
-        },
-      });
-    });
-  </script>
 
   <script>
     $("#updateForm").submit(function (e) {

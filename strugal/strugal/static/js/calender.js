@@ -1,6 +1,5 @@
 var url = window.location.href
 url = url.substring(30)
-console.log(url)
 var option = "0"
 if (url === 'anodisation') {
   option = "4"
@@ -35,11 +34,7 @@ $("#calendar").fullCalendar({
       if (url.length <= 0) {
         url = "extrusion"
       }
-      console.log(url)
       normal(test, calEvent, url)
-
-
-
     }
 
     // change the border color just for fun
@@ -49,28 +44,24 @@ $("#calendar").fullCalendar({
 
 
   dayClick: async function (date, jsEvent, view) {
-    var events = await getEventOfDay(date.format(), url)
+    let events = await getEventOfDay(date.format(), url)
     console.log(events)
-    console.log("jsEvent " + Object.keys(jsEvent.originalEvent))
     var today = aujourdhui()
     dayClickP(date, today, events, url, option)
-
   },
-
 });
 
-
-
 $('#inquiryModal').on('hidden.bs.modal', function (e) {
-  console.log('inquiryModal was hidden')
   $('.suplementaire').each(function (e) {
     $(this).remove()
   })
 })
 
-//coma back later to fix bugs
-function dayClickP(date, today, events, url, option) {
-  console.log("url " + url)
+async function dayClickP(date, today, events, url, option) {
+  planingDate = ""
+  planingDate = date
+  eventsPlaning = []
+  eventsPlaning = await getEventOfDay(planingDate.format(), url)
   $("#id_form-0-ref").val("");
   $("#id_form-0-qte").val("");
   var today = aujourdhui()
@@ -142,7 +133,10 @@ function dayClickP(date, today, events, url, option) {
     $("#jour").val(date.format())
     $('#id_form-0-date_created').val($("#jour").val())
 
-    $("#inquiryModal").submit(function (e) {
+    $("#inquiryModal").submit(async function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      console.log('yooo')
       var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
       var ref, qte;
       for (var j = 0; j < totalForm; j++) {
@@ -150,23 +144,23 @@ function dayClickP(date, today, events, url, option) {
         qte = $("#id_form-" + j.toString() + "-qte").val();
 
         var goodToGo = true
+        eventsPlaning.forEach((event) => {
 
-        events.forEach((event) => {
-          console.log(event)
           if (event.title === ref) {
             goodToGo = false;
-            // demo.showSwal('error-message', 'La référence ' + e['title'] + ' existe déja !')
-            // alert('La référence ' + e['title'] + ' existe déja !')
-            alert(event)
+            demo.showSwal('error-message', 'La référence ' + event['title'] + ' existe déja !')
             ref = $("#id_form-" + j.toString() + "-ref").val("");
             qte = $("#id_form-" + j.toString() + "-qte").val("");
             e.preventDefault();
-            console.log("event " + e)
+            e.stopImmediatePropagation();
           }
 
         })
-
+        console.log(eventsPlaning.length)
+        console.log(goodToGo)
         if (ref && qte && goodToGo) {
+          console.log("i'm in if (ref && qte && goodToGo) ")
+          console.log(goodToGo)
           $("#calendar").fullCalendar(
               "renderEvent", {
                 title: ref + "\n" + qte,
@@ -176,6 +170,21 @@ function dayClickP(date, today, events, url, option) {
               !0
             ),
             $;
+
+          var formData = new FormData($("#myForm")[0]);
+          if (url == "extrusion") url = ""
+
+          $.ajax({
+            url: "/planing/" + url,
+            type: "POST",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              console.log('data')
+            },
+          });
           $("#id_form-" + j.toString() + "-ref").val("");
           $("#id_form-" + j.toString() + "-qte").val("");
 
@@ -183,6 +192,8 @@ function dayClickP(date, today, events, url, option) {
           $(".fc-content .fc-time").remove();
         }
       }
+
+
     });
   }
 }
@@ -198,8 +209,8 @@ function aujourdhui() {
 }
 
 async function getEventOfDay(day, typeP) {
-
-  var json
+  console.log(day)
+  var json = []
   try {
     json = await $.ajax({
       url: `/planing/getdate/${day}/${typeP}`,
@@ -210,6 +221,7 @@ async function getEventOfDay(day, typeP) {
       dataType: 'JSON',
 
     })
+    console.log(json)
     return json
   } catch (error) {
     console.log(error)
@@ -251,9 +263,6 @@ function normal(test, calEvent, typeP) {
   })
 }
 
-
-
-
 function deleteProduct(id) {
   $('#deleteProduct').click(function () {
     $("#calendar").fullCalendar('removeEvents', id);
@@ -271,7 +280,6 @@ function deleteProduct(id) {
     $("#updateModal").modal("hide");
   })
 }
-
 
 function myDiv() {
   return $(
