@@ -13,11 +13,7 @@ class Objectif(models.Model):
 
 class RapportJournalierE(models.Model):
     id = models.AutoField(primary_key=True)
-    # ref = models.ForeignKey(ProductionPlan,
-    #                         on_delete=models.CASCADE,
-    #                         blank=True,
-    #                         null=True)
-    ref = models.CharField(max_length=255, null=True)
+    ref = models.ForeignKey(ProductionPlan, on_delete=models.CASCADE)
     obj = models.ForeignKey(Objectif, on_delete=models.CASCADE)
     prod_physique = models.FloatField()
     prod_conforme = models.FloatField()

@@ -1103,17 +1103,15 @@ demo = {
 
                 new_content = new_content + `
                             
-                            <tr>
-                              <td id='1'>` + response['final_data'][d]["ref"] + `</td>
-                              <td id='ppr'>` + response['final_data'][d]["prod_physique"] + `<td/>
-                              <td>` + response['final_data'][d]["prod_conforme"] + `</td>
-                              <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
-                              <td>` + response['final_data'][d]["prod_conforme"] + `</td>
-                              <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
-                              <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
-                              <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `</td>
-                              <td>` + response['final_data'][d]["n_of"] + `</td>
-                            </tr>
+                <tr>
+                <td id='1'>` + response['final_data'][d]["ref"] + `</td>
+                <td id='ppr'>` + response['final_data'][d]["prod_physique_par_ref"] + `</td>
+                <td>` + response['final_data'][d]["prod_conforme"] + `</td>
+                <td>` + response['final_data'][d]["prod_conforme_pou"] + `%</td>
+                <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
+                <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `%</td>
+                <td>` + response['final_data'][d]["n_of"] + `</td>
+              </tr>
                          `
               }
               new_content = new_content + `
@@ -1122,8 +1120,17 @@ demo = {
               table.replaceWith(new_content)
               try {
 
-                $('#1').after('<td rowspan=' + len + '>' + response['final_data'][0]["obj"] + '</td>');
-                $('#ppr').after('<td id="pprid"rowspan=' + len + '>' + response['final_data'][0]["prod_physique"] + '</td><td rowspan=' + len + '>' + response['final_data'][0]["prod_physique_pour"] + '</td>')
+                $('#1').after('<td id="hah" rowspan=' + response['len'] + '>' + response['final_data'][0]["obj"] + '</td>');
+                console.log(parseInt(response['len'] + 1))
+                $('#ppr').after('<td id="pprid" rowspan=' + parseInt(response['len'] + 1) + '>' + response['final_data'][0]["prod_physique"] + '</td><td rowspan=' + len + '>' + response['final_data'][0]["prod_physique_pou"] + '</td>')
+                $('#tabla tr:last').after(`<tr>
+                    <td colspan="2">Total</td>
+                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
+                    <td>{{totalPC}}</td>
+                    <td>{{totalPCP}}%</td>
+                    <td>{{totalPNC}}</td>
+                    <td>{{totalPNCP}}%</td>
+                        </tr>`);
               } catch (error) {
                 console.log('no data')
               }

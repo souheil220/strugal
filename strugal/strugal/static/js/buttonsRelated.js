@@ -3,158 +3,64 @@ url = url.substring(30)
 
 
 function wichDiv(number) {
-  if (url === 'anodisation' || url === 'laquageCouleur') {
-    return `
-    <div id='div-num-` + number + `'class="suplementaire" style="padding-bottom: 5%;">
-    <hr>
-    <div class="input-group">
-    <span class="input-group-addon">Ref</span>
-        <input
-          type="text"
-          name="form-` + number + `-ref"
-          class="form-control"
-          required="true"
-          maxlength="255"
-          id="id_form-` + number + `-ref"
-        />
-    </div>
-    <div class="input-group">
-       
-          <span class="input-group-addon">Ral </span>
-        <input
-          type="text"
-          name="form-` + number + `-ral"
-          class="form-control"
-          required="true"
-          maxlength="255"
-          id="id_form-` + number + `-ral"
-        />
-    </div>
-    <div class="input-group">
-      
-          <span class="input-group-addon">Qte</span>
-        
-        <input
-          type="number"
-          name="form-` + number + `-qte"
-          class="form-control"
-          required="true"
-          id="id_form-` + number + `-qte"
-        />
-    </div>
-    <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
-    <div class="closeButton" id='test'><div class='remove' id='remove_` +
-      number +
-      `'>&times;</div></div>
-    </div>`
-  } else if (url === 'rpt') {
-    return `<div id='div-num-` + number + `' class="suplementaire" style="padding-bottom: 5%;">
-    <hr>
-    <div class="input-group ">
-        
-          <span class="input-group-addon">Ref01</span>
+  var option = "0"
+  switch (url) {
+    case "extrusion":
+      option = "1"
+      break;
+    case "laquageBlanc":
+      option = "2"
+      break;
+    case "laquageCouleur":
+      option = "3"
+      break;
+    case "anodisation":
+      option = "4"
+      break;
+    default:
+      option = "5"
+  }
+  return `<div id='div-num-` + number + `' class="suplementaire"'style="padding-bottom: 5%;">
+  <hr>
+<div class="input-group">
     
-        <input
-          type="text"
-          name="form-` + number + `-ref01"
-          class="form-control"
-          required="true"
-          maxlength="255"
-          id="id_form-` + number + `-ref01"
-        />
-    </div>
-    <div class="input-group">
-        
-          <span class="input-group-addon">Ref02</span>
-        
-        <input
-          type="text"
-          name="form-` + number + `-ref02"
-          class="form-control"
-          required="true"
-          maxlength="255"
-          id="id_form-` + number + `-ref02"
-        />
-    </div>
-    <div class="input-group">
-        
-          <span class="input-group-addon">Ral01</span>
-        
-        <input
-          type="text"
-          name="form-` + number + `-ral01"
-          class="form-control"
-          required="true"
-          maxlength="255"
-          id="id_form-` + number + `-ral01"
-        />
-    </div>
-    <div class="input-group">
-    
-      <span class="input-group-addon">Ral02</span>
+      <span class="input-group-addon">Ref</span>
     
     <input
       type="text"
-      name="form-` + number + `-ral02"
+      name="form-` + number + `-ref"
       class="form-control"
       required="true"
       maxlength="255"
-      id="id_form-` + number + `-ral02"
+      id="id_form-` + number + `-ref"
     />
-    </div>
-    <div class="input-group">
-        
-          <span class="input-group-addon">Qte</span>
+</div>
+<div class="input-group">
     
-        <input
-          type="number"
-          name="form-` + number + `-qte"
-          class="form-control"
-          required="true"
-          id="id_form-` + number + `-qte"
-        />
-    </div>
-    <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
-    <div class="closeButton" id='test'><div class='remove' id='remove_` +
-      number +
-      `'>&times;</div></div>
-    </div>`
-  } else {
-    return `<div id='div-num-` + number + `' class="suplementaire"'style="padding-bottom: 5%;">
-    <hr>
-  <div class="input-group">
-      
-        <span class="input-group-addon">Ref</span>
-      
-      <input
-        type="text"
-        name="form-` + number + `-ref"
-        class="form-control"
-        required="true"
-        maxlength="255"
-        id="id_form-` + number + `-ref"
-      />
-  </div>
-  <div class="input-group">
-      
-        <span class="input-group-addon">Qte</span>
-      
-      <input
-        type="number"
-        name="form-` + number + `-qte"
-        class="form-control"
-        required="true"
-        id="id_form-` + number + `-qte"
-      />
-  </div>
-  <input type="hidden" name="form-` + number + `-date_created" id="id_form-` + number + `-date_created" value="` + $('#id_form-0-date_created').val() + `">
-  <div class="closeButton" id='test'>
-  <i class='ti-trash remove'id='remove_` +
-      number +
-      `'></i>
-  </div>
-  </div>`
-  }
+      <span class="input-group-addon">Qte</span>
+    
+    <input
+      type="number"
+      name="form-` + number + `-qte"
+      class="form-control"
+      required="true"
+      id="id_form-` + number + `-qte"
+    />
+</div>
+<input type="hidden" name="form-` + number + `-date_created" 
+id="id_form-` + number + `-date_created" 
+value="` + $('#id_form-0-date_created').val() + `"
+>
+<select name="form-` + number + `-typeP" 
+  id="id_form-` + number + `-typeP" hidden>
+    <option value="` + option + `" selected>` + url + `</option>
+</select>
+<div class="closeButton" id='test'>
+<i class='ti-trash remove'id='remove_` +
+    number +
+    `'></i>
+</div>
+</div>`
 }
 
 $("#add_more").click(function () {
@@ -290,7 +196,16 @@ $('#add-one-more').click(function () {
       id="id_ref-` + (parseInt(len) + 1).toString() + `"   
     />
   </td>
-  
+  <td>
+    <input
+      type="text"
+      name="obj-` + ((parseInt(len) + 1).toString()) +
+    `"
+      step="any"
+      class="form-control"
+      id="id_obj-` + (parseInt(len) + 1).toString() + `"   
+    />
+  </td>
   <td>
     <input
       type="number"

@@ -419,10 +419,36 @@ def get_data(typeR, date_created):
 
 def saveRapport(request, typeR):
     date_created = time.strftime("%Y-%m-%d", time.localtime())
+    data = get_data(typeR, date_created)
 
     if request.method == "POST":
         datalength = request.POST['datalength']
+        if int(datalength) == len(data):
+            rapportEALR(request, typeR, data, datalength)
 
-        rapportEALR(request, typeR, get_data(typeR, date_created), datalength)
+        else:
+            if len(data) == 0:
+                longeur = 1
+            else:
+                longeur = len(data)
+
+            savePlaning(request, typeR, longeur,
+                        int(datalength) + 1, date_created)
+
+            rapportEALR(request, typeR, get_data(typeR, date_created),
+                        datalength)
 
         return redirect('rapportAujourdui')
+
+
+def savePlaning(request, typeR, longeur, datalength, date_created):
+    for i in range(longeur, datalength):
+        ref = request.POST.get('ref-{}'.format(i))
+
+        prod_physique = request.POST.get('prod_physique-{}'.format(i))
+        planing = ProductionPlan(ref=ref,
+                                 qte=prod_physique,
+                                 date_created=date_created,
+                                 typeP=typeR,
+                                 planned=False)
+        planing.save()

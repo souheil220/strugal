@@ -1,21 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import ProductFormset
-from .models import ProductionPlan
+from .models import *
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.decorators import login_required
 import json
 
 
-def renderFormset(request):
+def renderFormset(request, url):
     print('renderFormset')
     formset = ProductFormset()
     formset = ProductFormset(request.POST or None)
 
-    product = ProductionPlan.objects.values()
-    list_result = [entry for entry in product]
-    print('list format {}'.format(list_result))
-    data = []
+    print(request.method)
     if request.method == 'POST':
         print("request post renderFormset")
         if formset.is_valid():
@@ -25,7 +22,8 @@ def renderFormset(request):
                 try:
                     is_there = ProductionPlan.objects.get(
                         ref=form.cleaned_data['ref'],
-                        typeP=form.cleaned_data['typeP'],
+                        typeP=TypePlaning.objects.get(
+                            form.cleaned_data['typeP']),
                         date_created=form.cleaned_data['date_created'])
                 except:
                     print(is_there)
@@ -35,169 +33,41 @@ def renderFormset(request):
         else:
             print(formset.errors)
             print('not valid')
-    data.append(formset)
-    data.append(list_result)
-    return data
+
+    return render(request, "planing/" + url + ".html")
 
 
 @login_required(login_url='login')
 def planing(request):
-    data = renderFormset(request)
-    formset = data[0]
-    list_result = data[1]
-    return render(
-        request, "planing/index.html", {
-            'formset': formset,
-            'product': json.dumps(list_result, cls=DjangoJSONEncoder)
-        })
+    return renderFormset(request, "index")
 
 
 @login_required(login_url='login')
 def anodisation(request):
-    formset = ProductFormset()
-    formset = ProductFormset(request.POST or None)
-
-    product = ProductionPlan.objects.values()
-    list_result = [entry for entry in product]
-    print('list format {}'.format(list_result))
-    print('request {}'.format(request))
-
-    if request.method == 'POST':
-        if formset.is_valid():
-
-            for form in formset:
-                is_there = None
-                try:
-                    is_there = ProductionPlan.objects.get(
-                        ref=form.cleaned_data['ref'],
-                        typeP=form.cleaned_data['typeP'],
-                        date_created=form.cleaned_data['date_created'])
-                except:
-                    print(is_there)
-                    instance = form.save(commit=False)
-                    instance.save()
-
-        else:
-            print(formset.errors)
-            print('not valid')
-        return HttpResponse('Hola')
-    return render(
-        request, "planing/anodisation.html", {
-            'formset': formset,
-            'product': json.dumps(list_result, cls=DjangoJSONEncoder)
-        })
+    return renderFormset(request, "anodisation")
 
 
 @login_required(login_url='login')
 def laquageBlanc(request):
-    formset = ProductFormset()
-    formset = ProductFormset(request.POST or None)
-
-    product = ProductionPlan.objects.values()
-    list_result = [entry for entry in product]
-
-    if request.method == 'POST':
-        if formset.is_valid():
-
-            for form in formset:
-                is_there = None
-                try:
-                    is_there = ProductionPlan.objects.get(
-                        ref=form.cleaned_data['ref'],
-                        typeP=form.cleaned_data['typeP'],
-                        date_created=form.cleaned_data['date_created'])
-                except:
-                    print(is_there)
-                    instance = form.save(commit=False)
-                    instance.save()
-
-        else:
-            print(formset.errors)
-            print('not valid')
-        return HttpResponse('Hola')
-    return render(
-        request, "planing/laquageBlanc.html", {
-            'formset': formset,
-            'product': json.dumps(list_result, cls=DjangoJSONEncoder)
-        })
+    return renderFormset(request, "laquageBlanc")
 
 
 @login_required(login_url='login')
 def laquageCouleur(request):
-    formset = ProductFormset()
-    formset = ProductFormset(request.POST or None)
-
-    product = ProductionPlan.objects.values()
-    list_result = [entry for entry in product]
-    print('list format {}'.format(list_result))
-    print('request {}'.format(request))
-
-    if request.method == 'POST':
-        if formset.is_valid():
-
-            for form in formset:
-                is_there = None
-                try:
-                    is_there = ProductionPlan.objects.get(
-                        ref=form.cleaned_data['ref'],
-                        typeP=form.cleaned_data['typeP'],
-                        date_created=form.cleaned_data['date_created'])
-                except:
-                    print(is_there)
-                    instance = form.save(commit=False)
-                    instance.save()
-
-        else:
-            print(formset.errors)
-            print('not valid')
-        return HttpResponse('Hola')
-    return render(
-        request, "planing/laquageCouleur.html", {
-            'formset': formset,
-            'product': json.dumps(list_result, cls=DjangoJSONEncoder)
-        })
+    return renderFormset(request, "laquageCouleur")
 
 
 @login_required(login_url='login')
 def rpt(request):
-    formset = ProductFormset()
-    formset = ProductFormset(request.POST or None)
-
-    product = ProductionPlan.objects.values()
-    list_result = [entry for entry in product]
-    print('list format {}'.format(list_result))
-    print('request {}'.format(request))
-
-    if request.method == 'POST':
-        if formset.is_valid():
-
-            for form in formset:
-                is_there = None
-                try:
-                    is_there = ProductionPlan.objects.get(
-                        ref=form.cleaned_data['ref'],
-                        typeP=form.cleaned_data['typeP'],
-                        date_created=form.cleaned_data['date_created'])
-                except:
-                    print(is_there)
-                    instance = form.save(commit=False)
-                    instance.save()
-
-        else:
-            print(formset.errors)
-            print('not valid')
-        return HttpResponse('Hola')
-    return render(
-        request, "planing/rpt.html", {
-            'formset': formset,
-            'product': json.dumps(list_result, cls=DjangoJSONEncoder)
-        })
+    return renderFormset(request, "rpt")
 
 
 def getEventList(debut, fin, typeM, typeP):
-    evenement = typeM.objects.filter(date_created__gte=debut,
-                                     date_created__lte=fin,
-                                     typeP=typeP)
+    evenement = typeM.objects.filter(
+        date_created__gte=debut,
+        date_created__lte=fin,
+        typeP=TypePlaning.objects.get(typeP=typeP),
+        planned=True)
 
     event_arr = []
     for i in evenement:
@@ -223,28 +93,6 @@ def events(request):
         fin = parametre.get('end')
         event_arr = getEventList(debut, fin, ProductionPlan, typeP)
         return HttpResponse(json.dumps(event_arr))
-
-
-def updateForALC(request, PPFT, PPMT, pk):
-    form = PPFT(request.POST)
-    if form.is_valid():
-        elem = PPMT.objects.get(id=int(pk))
-        elem.qte = int(form.cleaned_data[0]['qte'])
-        elem.ref = form.cleaned_data[0]['ref']
-        elem.ral = form.cleaned_data[0]['ral']
-        elem.save()
-
-
-def updateForRpt(request, pk):
-    form = ProductFormsetRPT(request.POST)
-    if form.is_valid():
-        elem = ProductionPlanRPT.objects.get(id=int(pk))
-        elem.qte = int(form.cleaned_data[0]['qte'])
-        elem.ref01 = form.cleaned_data[0]['ref01']
-        elem.ref02 = form.cleaned_data[0]['ref02']
-        elem.ral01 = form.cleaned_data[0]['ral01']
-        elem.ral02 = form.cleaned_data[0]['ral02']
-        elem.save()
 
 
 def update(request, pk):
@@ -275,7 +123,9 @@ def delete(request, pk):
 
 
 def getDate(request, date, typeP):
-    events = ProductionPlan.objects.filter(date_created=date, typeP=typeP)
+    events = ProductionPlan.objects.filter(
+        date_created=date, typeP=TypePlaning.objects.get(typeP=typeP))
+    print("events", events)
     event_arr = []
     for i in events:
         event_sub_arr = {}

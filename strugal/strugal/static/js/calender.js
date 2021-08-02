@@ -1,6 +1,19 @@
 var url = window.location.href
 url = url.substring(30)
 console.log(url)
+var option = "0"
+if (url === 'anodisation') {
+  option = "4"
+} else if (url === 'rpt') {
+  option = "5"
+} else if (url === 'laquageCouleur') {
+  option = "3"
+} else if (url === 'laquageBlanc') {
+  option = "2"
+} else {
+  url = "extrusion"
+  option = "1"
+}
 
 $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
@@ -35,22 +48,12 @@ $("#calendar").fullCalendar({
   },
 
 
-  dayClick: async function (date, jsEvent, view, ) {
-    if (url === 'anodisation') {
-      var events = await getEventOfDay(date.format(), 'anodisation')
-    } else if (url === 'rpt') {
-      var events = await getEventOfDay(date.format(), 'rpt')
-    } else if (url === 'laquageCouleur') {
-      var events = await getEventOfDay(date.format(), 'laquageCouleur')
-    } else if (url === 'laquageBlanc') {
-      var events = await getEventOfDay(date.format(), 'laquageBlanc')
-    } else {
-      url = "extrusion"
-      var events = await getEventOfDay(date.format(), 'extrusion')
-    }
+  dayClick: async function (date, jsEvent, view) {
+    var events = await getEventOfDay(date.format(), url)
     console.log(events)
+    console.log("jsEvent " + Object.keys(jsEvent.originalEvent))
     var today = aujourdhui()
-    dayClickP(date, today, events, url)
+    dayClickP(date, today, events, url, option)
 
   },
 
@@ -66,7 +69,7 @@ $('#inquiryModal').on('hidden.bs.modal', function (e) {
 })
 
 //coma back later to fix bugs
-function dayClickP(date, today, events, url) {
+function dayClickP(date, today, events, url, option) {
   console.log("url " + url)
   $("#id_form-0-ref").val("");
   $("#id_form-0-qte").val("");
@@ -129,19 +132,17 @@ function dayClickP(date, today, events, url) {
       name="form-0-date_created"
       id="id_form-0-date_created"
   />
-  <input
-      type="hidden"
-      name="form-0-typeP"
-      id="id_form-0-typeP"
-  />
+  
+  <select name="form-0-typeP" id="id_form-0-typeP" hidden>
+  <option value="` + option + `" selected>` + url + `</option>
+  </select>
       </div></div>`).insertBefore('#turningPoint')
 
 
     $("#jour").val(date.format())
     $('#id_form-0-date_created').val($("#jour").val())
-    $('#id_form-0-typeP').val(url)
 
-    $("#inquiryModal").submit(function (event) {
+    $("#inquiryModal").submit(function (e) {
       var totalForm = parseInt($("#id_form-TOTAL_FORMS").val());
       var ref, qte;
       for (var j = 0; j < totalForm; j++) {
@@ -150,13 +151,19 @@ function dayClickP(date, today, events, url) {
 
         var goodToGo = true
 
-        events.forEach((e) => {
-          if (e.title === ref) {
+        events.forEach((event) => {
+          console.log(event)
+          if (event.title === ref) {
             goodToGo = false;
-            demo.showSwal('error-message', 'La référence ' + e['title'] + ' existe déja !')
+            // demo.showSwal('error-message', 'La référence ' + e['title'] + ' existe déja !')
+            // alert('La référence ' + e['title'] + ' existe déja !')
+            alert(event)
             ref = $("#id_form-" + j.toString() + "-ref").val("");
             qte = $("#id_form-" + j.toString() + "-qte").val("");
+            e.preventDefault();
+            console.log("event " + e)
           }
+
         })
 
         if (ref && qte && goodToGo) {
@@ -172,9 +179,9 @@ function dayClickP(date, today, events, url) {
           $("#id_form-" + j.toString() + "-ref").val("");
           $("#id_form-" + j.toString() + "-qte").val("");
 
+          $("#inquiryModal").modal("hide");
+          $(".fc-content .fc-time").remove();
         }
-        $("#inquiryModal").modal("hide");
-        $(".fc-content .fc-time").remove();
       }
     });
   }
@@ -222,16 +229,15 @@ $('.close').click(function (e) {
 
 function normal(test, calEvent, typeP) {
   var today = aujourdhui()
+  $("#day").val(today)
   var newDiv = myDiv(test)
   newDiv.insertBefore('#sub_mod')
   deleteProduct(calEvent.id, typeP)
   $("#id_form-0-ref").val(test[0]);
   $("#id_form-0-qte").val(test[1]);
 
-  $("#day").val(today)
+
   $('#id').val(calEvent.id)
-  $('#id_form-0-date_created').val($("#day").val())
-  $('#id_form-0-typeP').val(typeP)
   $("#updateModal").submit(function () {
     ref = $("#id_form-0-ref").val();
     qte = $("#id_form-0-qte").val();
@@ -324,12 +330,12 @@ function myDiv() {
       type="hidden"
       name="form-0-date_created"
       id="id_form-0-date_created"
+      value = ` + $("#day").val() + `
     />
-    <input
-      type="hidden"
-      name="form-0-typeP"
-      id="id_form-0-typeP"
-    />
+    <select name="form-0-typeP" 
+  id="id_form-0-typeP" hidden>
+    <option value="` + option + `" selected>` + url + `</option>
+</select>
                     </div><div>`)
 
 }

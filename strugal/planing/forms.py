@@ -3,5 +3,10 @@ from .models import ProductionPlan
 
 ProductFormset = modelformset_factory(
     ProductionPlan,
-    fields=('ref', 'qte', 'date_created', 'typeP'),
+    fields=(
+        'ref',
+        'qte',
+        'typeP',
+        'date_created',
+    ),
 )

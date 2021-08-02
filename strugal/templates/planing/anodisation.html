@@ -1,5 +1,4 @@
-
-  {% include 'partials/header.html' %}
+{% include 'partials/header.html' %}
   <body>
     <div class="wrapper">
       {% include 'partials/side_bar.html' %}
@@ -79,7 +78,7 @@
       var formData = new FormData(this);
       console.log(formData);
       $.ajax({
-        url: `/planing/update/${$("#id").val()}?ppt=anodisation`,
+        url: `/planing/update/${$("#id").val()}`,
         type: "POST",
         data: formData,
         cache: false,
