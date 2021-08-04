@@ -53,15 +53,11 @@
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
                           <th class="text-center" scope="col" rowspan="2">PPPR</th>
                           <th class="text-center" scope="col" colspan="2">PP</th>
-                          <th class="text-center" scope="col" colspan="2">PC</th>
-                          <th class="text-center" scope="col" colspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">PC</th>
+                          <th class="text-center" scope="col" rowspan="2">PNC</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
                         </tr>
                         <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
                           <th class="text-center">en %</th>
                         </tr>
@@ -69,12 +65,10 @@
                       <tbody>
                         {% for d in data %}
                         <tr>
-                          <td id='{{ forloop.counter }}'>{{d.ref}}</td>
+                          <td id='{{ forloop.counter }}'>{{d.ref.ref}}</td>
                           <td id='ppr'>{{d.prod_physique_p_r}}</td>
                           <td>{{d.prod_conforme}}</td>
-                          <td>{{d.prod_conforme_pou}}%</td>
                           <td>{{d.prod_non_conforme}}</td>
-                          <td>{{d.prod_non_conforme_pou}}%</td>
                           <td>{{d.n_of}}</td>
                         </tr>
                         {% endfor %}
@@ -95,17 +89,17 @@
   
   <script>
    
-   
-    $('#1').after('<td rowspan="{{data|length}}">{{data.0.obj}}</td>');
-    $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{data.0.prod_physique.prod_physique_p_r__sum}}</td><td rowspan="{{data|length|add:'1'}}">{{data.0.prod_physique_pou}}%</td>`)
-    $('#tabla tr:last').after(` <tr>
-                    <td colspan="2">Total</td>
-                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
-                    <td>{{totalPC}}</td>
-                    <td>{{totalPCP}}%</td>
-                    <td>{{totalPNC}}</td>
-                    <td>{{totalPNCP}}%</td>
-                        </tr>`);
+    if(parseInt("{{data|length}}")>0){
+
+      $('#1').after('<td rowspan="{{data|length}}">{{data.0.obj}}(T)</td>');
+      $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{totalPPPR}}</td><td rowspan="{{data|length|add:'1'}}">{{prod_phy_pour}}%</td>`)
+      $('#tabla tr:last').after(` <tr>
+                      <td colspan="2">Total</td>
+                      <td>{{totalPPPR}}</td>
+                      <td>{{totalPC}}</td>
+                      <td>{{totalPNC}}</td>
+                          </tr>`);
+    }
    
     
   </script>
@@ -153,15 +147,11 @@
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
                           <th class="text-center" scope="col" rowspan="2">PPPR</th>
                           <th class="text-center" scope="col" colspan="2">PP</th>
-                          <th class="text-center" scope="col" colspan="2">PC</th>
-                          <th class="text-center" scope="col" colspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">PC</th>
+                          <th class="text-center" scope="col" rowspan="2">PNC</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
                         </tr>
                         <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
                           <th class="text-center">en %</th>
                         </tr>
@@ -172,11 +162,9 @@
                             new_content = new_content + `
                             <tr>
                               <td id='1'>`+response['final_data'][d]["ref"]+`</td>
-                              <td id='ppr'>`+response['final_data'][d]["prod_physique_par_ref"]+`</td>
+                              <td id='ppr'>`+response['final_data'][d]["prod_physique_p_r"]+`</td>
                               <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_conforme_pou"]+`%</td>
                               <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`%</td>
                               <td>`+response['final_data'][d]["n_of"]+`</td>
                             </tr>
                          `
@@ -188,14 +176,12 @@
                     try {
                         
                         $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
-                        $('#ppr').after('<td rowspan=' + +parseInt(response['len']+1) +'>'+response['final_data'][0]["prod_physique"]+'</td><td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response['final_data'][0]["prod_physique_pou"]+'%</td>')
+                        $('#ppr').after('<td rowspan=' + +parseInt(response['len']+1) +'>'+response["result"]['totalProd']+'</td><td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response["result"]['prod_phy_pour']+'%</td>')
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
-                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
-                    <td>{{totalPC}}</td>
-                    <td>{{totalPCP}}%</td>
-                    <td>{{totalPNC}}</td>
-                    <td>{{totalPNCP}}%</td>
+                    <td>`+response["result"]['totalProd']+`</td>
+                    <td>`+response["result"]['totalPC']+`</td>
+                    <td>`+response["result"]['totalPNC']+`</td>
                         </tr>`);
   
                     } catch (error) {
@@ -208,22 +194,12 @@
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
-                          <th class="text-center" scope="col" colspan="2">PP</th>
-                          <th class="text-center" scope="col" colspan="2">PC</th>
-                          <th class="text-center" scope="col" colspan="2">PNC</th>
-                          <th class="text-center" scope="col" colspan="2">DG</th>
+                          <th class="text-center" scope="col" rowspan="2">PP</th>
+                          <th class="text-center" scope="col" rowspan="2">PC</th>
+                          <th class="text-center" scope="col" rowspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">DG</th>
                           <th class="text-center" scope="col" rowspan="2">NBR</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
-                        </tr>
-                        <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                         </tr>
                       </thead>
                       <tbody>`
@@ -233,13 +209,13 @@
                         new_content = new_content + `<tr>
                           <td id='1'>`+response['final_data'][d]["ref"]+`</td>
                           <td>`+response['final_data'][d]["prod_physique"]+`</td>
-                          <td>`+response['final_data'][d]["prod_physique_pou"]+`%</td>
+                          
                           <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                          <td>`+response['final_data'][d]["prod_conforme_pou"]+`%</td>
+                          
                           <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
-                          <td>`+response['final_data'][d]["prod_non_conforme_pou"]+`%</td>
+                         
                           <td>`+response['final_data'][d]["deche_geometrique"]+`</td>
-                          <td>`+response['final_data'][d]["deche_geometrique_pou"]+`%</td>
+                          
                           <td>`+response['final_data'][d]["nbr_barre"]+`</td>
                           <td>`+response['final_data'][d]["n_of"]+`</td>
                         </tr>`
@@ -253,23 +229,16 @@
                       $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
-                    <td>`+response['totalPP']+`</td>
-                    <td>`+response['totalPPP']+`%</td>
-                    <td>`+response['totalPC']+`</td>
-                    <td>`+response['totalPPC']+`%</td>
-                    <td>`+response['totalPNC']+`</td>
-                    <td>`+response['totalPPNC']+`%</td>
-                    <td>`+response['totalDG']+`</td>
-                    <td>`+response['totalDGP']+`%</td>
-                    <td>`+response['totalNBR']+`</td>
+                    <td>`+response["result"]['totalProd']+`</td>
+                    <td>`+response["result"]['totalPC']+`</td>
+                    <td>`+response["result"]['totalPNC']+`</td>
+                    <td>`+response["result"]['totalDG']+`</td>
+                    <td>`+response["result"]['totalNBR']+`</td>
                         </tr>`);
                     } catch (error) {
                         console.log('no data')
                     }
            }
-           
-            
-            
           },
         });
   }

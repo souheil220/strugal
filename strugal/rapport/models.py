@@ -40,11 +40,10 @@ class TypeRapport(models.Model):
 
 class RapportJournalierALR(models.Model):
     id = models.AutoField(primary_key=True)
-    # ref = models.ForeignKey(ProductionPlan,
-    #                         on_delete=models.CASCADE,
-    #                         blank=True,
-    #                         null=True)
-    ref = models.CharField(max_length=255, null=True)
+    ref = models.ForeignKey(ProductionPlan,
+                            on_delete=models.CASCADE,
+                            blank=True,
+                            null=True)
     obj = models.ForeignKey(Objectif, on_delete=models.CASCADE)
     prod_physique_p_r = models.FloatField(default=0)
     prod_physique = models.FloatField()

@@ -1149,13 +1149,9 @@ demo = {
                         </tr>
                         <tr>
                           <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                         </tr>
                       </thead>
                       <tbody>`
