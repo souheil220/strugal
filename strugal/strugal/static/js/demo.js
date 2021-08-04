@@ -1078,22 +1078,18 @@ demo = {
             var table = $('#table-div').children()
             var new_content = ''
             if (checked !== 'Extrusion') {
-              new_content = `<table class="table table-hover table-bordered">
+              new_content = `<table id='tabla' class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
                           <th class="text-center" scope="col" rowspan="2">PPPR</th>
                           <th class="text-center" scope="col" colspan="2">PP</th>
-                          <th class="text-center" scope="col" colspan="2">PC</th>
-                          <th class="text-center" scope="col" colspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">PC</th>
+                          <th class="text-center" scope="col" rowspan="2">PNC</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
                         </tr>
                         <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en %</th>
                           <th class="text-center">en tonne</th>
                           <th class="text-center">en %</th>
                         </tr>
@@ -1104,14 +1100,12 @@ demo = {
                 new_content = new_content + `
                             
                 <tr>
-                <td id='1'>` + response['final_data'][d]["ref"] + `</td>
-                <td id='ppr'>` + response['final_data'][d]["prod_physique_par_ref"] + `</td>
-                <td>` + response['final_data'][d]["prod_conforme"] + `</td>
-                <td>` + response['final_data'][d]["prod_conforme_pou"] + `%</td>
-                <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
-                <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `%</td>
-                <td>` + response['final_data'][d]["n_of"] + `</td>
-              </tr>
+                              <td id='1'>` + response['final_data'][d]["ref"] + `</td>
+                              <td class="text-center" id='ppr'>` + response['final_data'][d]["prod_physique_p_r"] + `</td>
+                              <td class="text-center">` + response['final_data'][d]["prod_conforme"] + `</td>
+                              <td class="text-center">` + response['final_data'][d]["prod_non_conforme"] + `</td>
+                              <td class="text-center">` + response['final_data'][d]["n_of"] + `</td>
+                            </tr>
                          `
               }
               new_content = new_content + `
@@ -1119,39 +1113,29 @@ demo = {
                     </table>`
               table.replaceWith(new_content)
               try {
-
-                $('#1').after('<td id="hah" rowspan=' + response['len'] + '>' + response['final_data'][0]["obj"] + '</td>');
-                console.log(parseInt(response['len'] + 1))
-                $('#ppr').after('<td id="pprid" rowspan=' + parseInt(response['len'] + 1) + '>' + response['final_data'][0]["prod_physique"] + '</td><td rowspan=' + len + '>' + response['final_data'][0]["prod_physique_pou"] + '</td>')
+                $('#1').after('<td class="text-center" rowspan=' + response['len'] + '>' + response['final_data'][0]["obj"] + '</td>');
+                $('#ppr').after('<td class="text-center" rowspan=' + +parseInt(response['len'] + 1) + '>' + response["result"]['totalProd'] + '</td><td class="text-center" rowspan=' + (parseInt(response['len']) + 1).toString() + '>' + response["result"]['prod_phy_pour'] + '%</td>')
                 $('#tabla tr:last').after(`<tr>
-                    <td colspan="2">Total</td>
-                    <td>{{data.0.prod_physique.prod_physique_p_r__sum}}</td>
-                    <td>{{totalPC}}</td>
-                    <td>{{totalPCP}}%</td>
-                    <td>{{totalPNC}}</td>
-                    <td>{{totalPNCP}}%</td>
-                        </tr>`);
+            <td colspan="2">Total</td>
+            <td class="text-center">` + response["result"]['totalProd'] + `</td>
+            <td class="text-center">` + response["result"]['totalPC'] + `</td>
+            <td class="text-center">` + response["result"]['totalPNC'] + `</td>
+                </tr>`);
               } catch (error) {
                 console.log('no data')
               }
             } else {
-              new_content = `<table class="table table-hover table-bordered">
+              new_content = `<table id='tabla' class="table table-hover table-bordered">
                       <thead>
                         <tr>
                           <th class="text-center" scope="col" rowspan="2">Reference</th>
                           <th class="text-center" scope="col" rowspan="2">OBJ</th>
-                          <th class="text-center" scope="col" colspan="2">PP</th>
-                          <th class="text-center" scope="col" colspan="2">PC</th>
-                          <th class="text-center" scope="col" colspan="2">PNC</th>
-                          <th class="text-center" scope="col" colspan="2">DG</th>
+                          <th class="text-center" scope="col" rowspan="2">PP</th>
+                          <th class="text-center" scope="col" rowspan="2">PC</th>
+                          <th class="text-center" scope="col" rowspan="2">PNC</th>
+                          <th class="text-center" scope="col" rowspan="2">DG</th>
                           <th class="text-center" scope="col" rowspan="2">NBR</th>
                           <th class="text-center" scope="col" rowspan="2">NOF</th>
-                        </tr>
-                        <tr>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en tonne</th>
-                          <th class="text-center">en tonne</th>
                         </tr>
                       </thead>
                       <tbody>`
@@ -1160,23 +1144,32 @@ demo = {
                 console.log(response['final_data'][d])
                 new_content = new_content + `<tr>
                           <td id='1'>` + response['final_data'][d]["ref"] + `</td>
-                          <td>` + response['final_data'][d]["prod_physique"] + `</td>
-                          <td>` + response['final_data'][d]["prod_physique_pou"] + `</td>
-                          <td>` + response['final_data'][d]["prod_conforme"] + `</td>
-                          <td>` + response['final_data'][d]["prod_conforme_pou"] + `</td>
-                          <td>` + response['final_data'][d]["prod_non_conforme"] + `</td>
-                          <td>` + response['final_data'][d]["prod_non_conforme_pou"] + `</td>
-                          <td>` + response['final_data'][d]["deche_geometrique"] + `</td>
-                          <td>` + response['final_data'][d]["deche_geometrique_pou"] + `</td>
-                          <td>` + response['final_data'][d]["nbr_barre"] + `</td>
-                          <td>` + response['final_data'][d]["n_of"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["prod_physique"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["prod_conforme"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["prod_non_conforme"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["deche_geometrique"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["nbr_barre"] + `</td>
+                          <td class="text-center">` + response['final_data'][d]["n_of"] + `</td>
                         </tr>`
               }
               new_content = new_content + ` </tbody>
                     </table>`
               table.replaceWith(new_content)
               len = $('#data').val()
-              $('#1').after('<td rowspan=' + len + '>7</td>');
+              try {
+
+                $('#1').after('<td class="text-center" rowspan=' + response['len'] + '>' + response['final_data'][0]["obj"] + ' (T)</td>');
+                $('#tabla tr:last').after(`<tr>
+              <td colspan="2">Total</td>
+              <td class="text-center">` + response["result"]['totalProd'] + `</td>
+              <td class="text-center">` + response["result"]['totalPC'] + `</td>
+              <td class="text-center">` + response["result"]['totalPNC'] + `</td>
+              <td class="text-center">` + response["result"]['totalDG'] + `</td>
+              <td class="text-center">` + response["result"]['totalNBR'] + `</td>
+                  </tr>`);
+              } catch (error) {
+                console.log('no data')
+              }
             }
 
 

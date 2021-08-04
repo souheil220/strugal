@@ -194,6 +194,20 @@
                 </ul>
               </div>
             </li>
+
+             <!-- RapportJ  -->
+
+             {% with request.resolver_match.url_name as url_name %} 
+             <li {% if url_name == 'updateObjectif' %}class="active"{% endif %}>
+               {% now 'Y-m-d' as mnt %}
+               <a href='{% url "updateObjectif" %}'>
+                 <i class="ti-agenda"></i>
+                 <p>
+                  Update Objectif
+                 </p>
+               </a>
+             </li>
+           {% endwith %}
           </ul>
         </div>
       </div>

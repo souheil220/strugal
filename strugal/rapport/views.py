@@ -355,3 +355,16 @@ def data_returned(data, typeR):
 
     print(final_data)
     return final_data
+
+
+def update_obj(request):
+    if request.method == "POST":
+        updated_obj = request.POST['obj']
+        type_of_p = request.POST['typeP']
+        obj = Objectif.objects.get(id=int(type_of_p))
+        obj.value = float(updated_obj)
+        obj.save()
+
+    type_Planing = TypePlaning.objects.all()
+    context = {"type_Planing": type_Planing}
+    return render(request, 'rapport/update_objectif.html', context)

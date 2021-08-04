@@ -66,10 +66,10 @@
                         {% for d in data %}
                         <tr>
                           <td id='{{ forloop.counter }}'>{{d.ref.ref}}</td>
-                          <td id='ppr'>{{d.prod_physique_p_r}}</td>
-                          <td>{{d.prod_conforme}}</td>
-                          <td>{{d.prod_non_conforme}}</td>
-                          <td>{{d.n_of}}</td>
+                          <td class="text-center" id='ppr'>{{d.prod_physique_p_r}}</td>
+                          <td class="text-center">{{d.prod_conforme}}</td>
+                          <td class="text-center">{{d.prod_non_conforme}}</td>
+                          <td class="text-center">{{d.n_of}}</td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -91,13 +91,13 @@
    
     if(parseInt("{{data|length}}")>0){
 
-      $('#1').after('<td rowspan="{{data|length}}">{{data.0.obj}}(T)</td>');
-      $('#ppr').after(`<td rowspan="{{data|length|add:'1'}}"> {{totalPPPR}}</td><td rowspan="{{data|length|add:'1'}}">{{prod_phy_pour}}%</td>`)
+      $('#1').after('<td class="text-center" rowspan="{{data|length}}">{{data.0.obj}}</td>');
+      $('#ppr').after(`<td class="text-center" rowspan="{{data|length|add:'1'}}"> {{totalPPPR}}</td><td class="text-center" rowspan="{{data|length|add:'1'}}">{{prod_phy_pour}}%</td>`)
       $('#tabla tr:last').after(` <tr>
                       <td colspan="2">Total</td>
-                      <td>{{totalPPPR}}</td>
-                      <td>{{totalPC}}</td>
-                      <td>{{totalPNC}}</td>
+                      <td class="text-center">{{totalPPPR}}</td>
+                      <td class="text-center">{{totalPC}}</td>
+                      <td class="text-center">{{totalPNC}}</td>
                           </tr>`);
     }
    
@@ -130,7 +130,6 @@
          
         $.ajax({
           url: `/rapport/rapport/${type}/${$('#la_date').val()}`,
-          // url: `/rapport/rapport/Extrusion/${date}`,
           type: "GET",
           cache: false,
           dataType: 'json',
@@ -162,10 +161,10 @@
                             new_content = new_content + `
                             <tr>
                               <td id='1'>`+response['final_data'][d]["ref"]+`</td>
-                              <td id='ppr'>`+response['final_data'][d]["prod_physique_p_r"]+`</td>
-                              <td>`+response['final_data'][d]["prod_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
-                              <td>`+response['final_data'][d]["n_of"]+`</td>
+                              <td class="text-center" id='ppr' class="text-center">`+response['final_data'][d]["prod_physique_p_r"]+`</td>
+                              <td class="text-center">`+response['final_data'][d]["prod_conforme"]+`</td>
+                              <td class="text-center">`+response['final_data'][d]["prod_non_conforme"]+`</td>
+                              <td class="text-center">`+response['final_data'][d]["n_of"]+`</td>
                             </tr>
                          `
                         }
@@ -175,13 +174,13 @@
                     table.replaceWith(new_content)
                     try {
                         
-                        $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
-                        $('#ppr').after('<td rowspan=' + +parseInt(response['len']+1) +'>'+response["result"]['totalProd']+'</td><td rowspan='+(parseInt(response['len'])+1).toString()+'>'+response["result"]['prod_phy_pour']+'%</td>')
+                        $('#1').after('<td class="text-center" rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'</td>');
+                        $('#ppr').after('<td class="text-center" rowspan=' + +parseInt(response['len']+1) +'>'+response["result"]['totalProd']+'</td><td class="text-center" rowspan='+(parseInt(response['len'])+1).toString()+'>'+response["result"]['prod_phy_pour']+'%</td>')
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
-                    <td>`+response["result"]['totalProd']+`</td>
-                    <td>`+response["result"]['totalPC']+`</td>
-                    <td>`+response["result"]['totalPNC']+`</td>
+                    <td class="text-center">`+response["result"]['totalProd']+`</td>
+                    <td class="text-center">`+response["result"]['totalPC']+`</td>
+                    <td class="text-center">`+response["result"]['totalPNC']+`</td>
                         </tr>`);
   
                     } catch (error) {
@@ -208,16 +207,16 @@
                             console.log(response['final_data'][d])
                         new_content = new_content + `<tr>
                           <td id='1'>`+response['final_data'][d]["ref"]+`</td>
-                          <td>`+response['final_data'][d]["prod_physique"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["prod_physique"]+`</td>
                           
-                          <td>`+response['final_data'][d]["prod_conforme"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["prod_conforme"]+`</td>
                           
-                          <td>`+response['final_data'][d]["prod_non_conforme"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["prod_non_conforme"]+`</td>
                          
-                          <td>`+response['final_data'][d]["deche_geometrique"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["deche_geometrique"]+`</td>
                           
-                          <td>`+response['final_data'][d]["nbr_barre"]+`</td>
-                          <td>`+response['final_data'][d]["n_of"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["nbr_barre"]+`</td>
+                          <td class="text-center">`+response['final_data'][d]["n_of"]+`</td>
                         </tr>`
                         }
                         new_content = new_content+` </tbody>
@@ -226,14 +225,14 @@
                     len =  $('#data').val()
                     try {
                         
-                      $('#1').after('<td rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+'(T)</td>');
+                      $('#1').after('<td class="text-center" rowspan='+response['len']+'>'+response['final_data'][0]["obj"]+' (T)</td>');
                         $('#tabla tr:last').after(`<tr>
                     <td colspan="2">Total</td>
-                    <td>`+response["result"]['totalProd']+`</td>
-                    <td>`+response["result"]['totalPC']+`</td>
-                    <td>`+response["result"]['totalPNC']+`</td>
-                    <td>`+response["result"]['totalDG']+`</td>
-                    <td>`+response["result"]['totalNBR']+`</td>
+                    <td class="text-center">`+response["result"]['totalProd']+`</td>
+                    <td class="text-center">`+response["result"]['totalPC']+`</td>
+                    <td class="text-center">`+response["result"]['totalPNC']+`</td>
+                    <td class="text-center">`+response["result"]['totalDG']+`</td>
+                    <td class="text-center">`+response["result"]['totalNBR']+`</td>
                         </tr>`);
                     } catch (error) {
                         console.log('no data')
