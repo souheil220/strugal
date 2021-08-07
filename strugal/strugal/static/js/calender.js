@@ -18,6 +18,8 @@ $("#calendar").fullCalendar({
   themeSystem: 'bootstrap4',
   defaultView: "basicWeek",
   displayEventTime: false,
+  lang: 'fr',
+  firstDay: 6,
   events: `/planing/a?palning=` + url + `/events`,
   header: {
     left: 'prev,next today',
