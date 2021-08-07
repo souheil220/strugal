@@ -18,40 +18,32 @@ def checkRepport(ProductionPlan, reportM, typeR):
     data = ProductionPlan.objects.filter(
         Q(date_created=time.strftime("%Y-%m-%d", time.localtime())),
         typeP=TypePlaning.objects.get(typeP=typeR.lower()))
-    print('data ', data)
     test = []
     try:
         for plan in data:
-            repport = reportM.objects.filter(ref=plan).values()
-            test.append(repport)
+            haja = []
+            rapport = reportM.objects.filter(ref=plan).values()
+            haja.append(rapport)
+            haja.append(plan)
+            test.append(haja)
 
         i = 0
 
         for t in test:
-            # print(t)
             if i < len(test):
 
                 if typeR == 'Extrusion':
 
-                    data[i].deche_geometrique = t[0]['deche_geometrique']
+                    test[i].deche_geometrique = t[0]['deche_geometrique']
                     # print(data[i].deche_geometrique)
-                    data[i].nbr_barre = t[0]['nbr_barre']
+                    test[i].nbr_barre = t[0]['nbr_barre']
                 else:
-                    data[i].prod_physique_p_r = t[0]['prod_physique_p_r']
-
-                data[i].prod_physique = t[0]['prod_physique']
-                data[i].obj = t[0]['obj']
-                data[i].prod_conforme = t[0]['prod_conforme']
-                data[i].prod_non_conforme = t[0]['prod_non_conforme']
-                data[i].n_of = t[0]['n_of']
-                data[i].realise = t[0]['realise']
+                    test[i].prod_physique_p_r = t[0]['prod_physique_p_r']
 
             i += 1
-            # print("data : ", t[i].realise)
-        print("data : ", data)
-        return data
+        return test
     except:
-        return data
+        return test
 
 
 @login_required(login_url='login')
@@ -71,7 +63,6 @@ def rediger_rapport(request, typeR):
 
         if data is not None:
             test = len(data)
-        print(data)
         context = {'data': data, 'list': test, "typeR": typeR}
         return render(request, 'rapport/rediget_rapport.html', context)
 
@@ -82,7 +73,7 @@ def rapportAujourdui(request):
     typeR = TypeRapport.objects.get(value='Anodisation')
     data = RapportJournalierALR.objects.filter(date_created=aujourdhui,
                                                typeR=typeR)
-    calc_data(data, 'Anodisation', RapportJournalierALR)
+
     if (len(data) > 0):
         data = list(data)
         result_calc_data = calc_data(list(data), typeR, RapportJournalierALR)
@@ -167,6 +158,23 @@ def sauvegarder(rapportExistant, deche_geometrique, nbr_barre, prod_physique,
 
 
 def rapportEALR(request, typeR, data, datalength):
+    if typeR == "Extrusion":
+        obj = Objectif.objects.get(id=1)
+    elif typeR == 'LaquageBlanc':
+        type_du_rap = TypeRapport.objects.get(value='Laquage Blanc')
+        obj = Objectif.objects.get(id=2)
+    elif typeR == 'LaquageCouleur':
+        type_du_rap = TypeRapport.objects.get(value='Laquage Couleur')
+        obj = Objectif.objects.get(id=3)
+    elif typeR == 'Anodisation':
+        type_du_rap = TypeRapport.objects.get(value='Anodisation')
+        print(type(type_du_rap))
+        obj = Objectif.objects.get(id=4)
+    else:
+        type_du_rap = TypeRapport.objects.get(value='RPT')
+        obj = Objectif.objects.get(id=5)
+
+    print(typeR)
     if typeR == 'Extrusion':
         RapportJournalierConcerner = RapportJournalierE
     else:
@@ -185,25 +193,11 @@ def rapportEALR(request, typeR, data, datalength):
         else:
             realise = 'False'
         try:
+            print(id)
             rapportExistant = RapportJournalierConcerner.objects.select_related(
-            ).filter(ref=id)
+            ).filter(ref=ref)
 
             print('existe  ?: ', len(rapportExistant) > 0)
-            if typeR == "Extrusion":
-                obj = Objectif.objects.get(id=1)
-            elif typeR == 'LaquageBlanc':
-                type_du_rap = TypeRapport.objects.get(value='LaquageBlanc')
-                obj = Objectif.objects.get(id=2)
-            elif typeR == 'LaquageCouleur':
-                type_du_rap = TypeRapport.objects.get(value='LaquageCouleur')
-                obj = Objectif.objects.get(id=3)
-            elif typeR == 'Anodisation':
-                type_du_rap = TypeRapport.objects.get(value='Anodisation')
-                print(type(type_du_rap))
-                obj = Objectif.objects.get(id=4)
-            else:
-                type_du_rap = TypeRapport.objects.get(value='RPT')
-                obj = Objectif.objects.get(id=5)
 
             if len(rapportExistant) > 0:
                 if typeR == "Extrusion":
@@ -276,8 +270,6 @@ def saveRapport(request, typeR):
         datalength = request.POST['datalength']
         if int(datalength) == len(data):
             rapportEALR(request, typeR, data, datalength)
-            pass
-
         else:
             if len(data) == 0:
                 longeur = 1
@@ -375,8 +367,9 @@ def donner_permission(request):
     if request.method == "POST":
         ad2000 = request.POST['ad2000'].lower()
         email = request.POST['email']
-        utilisateur = User.objects.create_user(
-            username=ad2000, email=email, password='Azerty@22')
+        utilisateur = User.objects.create_user(username=ad2000,
+                                               email=email,
+                                               password='Azerty@22')
         utilisateur.save()
 
     return render(

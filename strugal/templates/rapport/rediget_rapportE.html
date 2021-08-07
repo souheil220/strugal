@@ -32,7 +32,7 @@
                 <tbody>
                   {% for d in data %}
                   <tr>
-                      <td hidden><input type="text" name="id-{{ forloop.counter }}" value="{{d.id}}" hidden></td>
+                      <td hidden><input type="text" name="id-{{ forloop.counter }}" value="{{d.0.0id}}" hidden></td>
                     <td>
             
                       <input
@@ -41,7 +41,7 @@
                         step="any"
                         class="form-control"
                         id="id_ref-{{ forloop.counter }}"
-                        value="{{d.ref}}"
+                        value="{{d.1.ref}}"
                         readonly
                       />
                     </td>
@@ -54,7 +54,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_physique-{{ forloop.counter }}"
-                        value="{{d.prod_physique}}"
+                        value="{{d.0.0.prod_physique}}"
                       />
                     </td>
                     <td>
@@ -65,7 +65,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_conforme-{{ forloop.counter }}"
-                        value="{{d.prod_conforme}}"
+                        value="{{d.0.0.prod_conforme}}"
                       />
                     </td>
                     <td>
@@ -76,7 +76,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_non_conforme-{{ forloop.counter }}"
-                        value="{{d.prod_non_conforme}}"
+                        value="{{d.0.0.prod_non_conforme}}"
                       />
                     </td>
                     <td>
@@ -87,7 +87,7 @@
                         class="form-control"
                         required=""
                         id="id_deche_geometrique-{{ forloop.counter }}"
-                        value="{{d.deche_geometrique}}"
+                        value="{{d.0.0.deche_geometrique}}"
                       />
                     </td>
                     <td>
@@ -98,7 +98,7 @@
                         class="form-control"
                         required=""
                         id="id_nbr_barre-{{ forloop.counter }}"
-                        value="{{d.nbr_barre}}"
+                        value="{{d.0.0.nbr_barre}}"
                       />
                     </td>
                     <td>
@@ -109,7 +109,7 @@
                         class="form-control"
                         required=""
                         id="id_n_of-{{ forloop.counter }}"
-                        value="{{d.n_of}}"
+                        value="{{d.0.0.n_of}}"
                       />
                     </td>
                     <td>
@@ -121,7 +121,7 @@
                         step="any"
                         class="form-control"
                         id="id_realise-{{ forloop.counter }}"
-                        {% if d.realise == True  %}checked{% endif %}
+                        {% if d.0.0.realise == True  %}checked{% endif %}
                       />
               
                     </td>

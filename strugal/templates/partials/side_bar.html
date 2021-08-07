@@ -24,7 +24,8 @@
           <!-- User -->
           <div class="user">
             <div class="photo">
-              <img src="{% static 'img/faces/face-2.jpg' %}" />
+              <!-- <img src="{% static 'img/faces/face-2.jpg' %}" /> -->
+              <img src="/media/{{request.user}}.png"/>
             </div>
             <div class="info">
               <a
@@ -41,24 +42,7 @@
 
               <div class="collapse" id="collapseExample">
                 <ul class="nav">
-                  <li>
-                    <a href="#profile">
-                      <span class="sidebar-mini">Mp</span>
-                      <span class="sidebar-normal">My Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#edit">
-                      <span class="sidebar-mini">Ep</span>
-                      <span class="sidebar-normal">Edit Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#settings">
-                      <span class="sidebar-mini">S</span>
-                      <span class="sidebar-normal">Settings</span>
-                    </a>
-                  </li>
+                 
                   <li>
                     <a href="{% url 'logout' %}">
                       <span class="sidebar-mini">LO</span>
@@ -201,9 +185,9 @@
              <li {% if url_name == 'updateObjectif' %}class="active"{% endif %}>
                {% now 'Y-m-d' as mnt %}
                <a href='{% url "updateObjectif" %}'>
-                 <i class="ti-agenda"></i>
+                 <i class="ti-pencil-alt"></i>
                  <p>
-                  Update Objectif
+                  Modifier Objectif
                  </p>
                </a>
              </li>
@@ -215,7 +199,7 @@
             <li {% if url_name == 'donnerPermission' %}class="active"{% endif %}>
               {% now 'Y-m-d' as mnt %}
               <a href='{% url "donnerPermission" %}'>
-                <i class="ti-agenda"></i>
+                <i class="ti-key"></i>
                 <p>
                  Donner Permission
                 </p>

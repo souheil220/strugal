@@ -1,4 +1,5 @@
 {% include 'partials/header.html' %}
+<title>Strugal | Rediger Rapport</title>
   <body>
     <div class="wrapper">
       {% include 'partials/side_bar.html' %}
@@ -31,7 +32,7 @@
                 <tbody>
                   {% for d in data %}
                   <tr>
-                    <td hidden><input type="text" name="id-{{ forloop.counter }}" value="{{d.id}}" hidden></td>
+                    <td hidden><input type="text" name="id-{{ forloop.counter }}" value="{{d.0.0.id}}" hidden></td>
                     <td>
                       <input
                         type="text"
@@ -39,7 +40,7 @@
                         step="any"
                         class="form-control"
                         id="id_ref-{{ forloop.counter }}"
-                        value="{{d.ref}}"
+                        value="{{d.1.ref}}"
                         readonly
                       />
                     </td>
@@ -51,7 +52,7 @@
                           class="form-control"
                           required=""
                           id="id_prod_physique_p_r-{{ forloop.counter }}"
-                          value="{{d.prod_physique_p_r}}"
+                          value="{{d.0.0.prod_physique_p_r}}"
                         />
                       </td>
                     <td>
@@ -62,7 +63,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_physique-{{ forloop.counter }}"
-                        value="{{d.prod_physique}}"
+                        value="{{d.0.0.prod_physique}}"
                       />
                     </td>
                     
@@ -74,7 +75,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_conforme-{{ forloop.counter }}"
-                        value="{{d.prod_conforme}}"
+                        value="{{d.0.0.prod_conforme}}"
                       />
                     </td>
                     <td>
@@ -85,7 +86,7 @@
                         class="form-control"
                         required=""
                         id="id_prod_non_conforme-{{ forloop.counter }}"
-                        value="{{d.prod_non_conforme}}"
+                        value="{{d.0.0.prod_non_conforme}}"
                       />
                     </td>
                    
@@ -98,7 +99,7 @@
                         class="form-control"
                         required=""
                         id="id_n_of-{{ forloop.counter }}"
-                        value="{{d.n_of}}"
+                        value="{{d.0.0.n_of}}"
                       />
                     </td>
                     <td>
@@ -109,7 +110,7 @@
                         step="any"
                         class="form-control"
                         id="id_realise-{{ forloop.counter }}"
-                        {% if d.realise == True  %}checked{% endif %}
+                        {% if d.0.0.realise == True  %}checked{% endif %}
                       />
                     </td>
                   </tr>

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as messages
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -125,5 +126,11 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATIC_URL = "/static/"
-print(BASE_DIR)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "strugal/static")]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+# MESSAGES
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}

@@ -66,7 +66,7 @@ def getEventList(debut, fin, typeM, typeP):
     evenement = typeM.objects.filter(
         date_created__gte=debut,
         date_created__lte=fin,
-        typeP=TypePlaning.objects.get(typeP=typeP),
+        typeP=TypePlaning.objects.get(typeP=typeP.lower()),
         planned=True)
 
     event_arr = []
@@ -124,7 +124,7 @@ def delete(request, pk):
 
 def getDate(request, date, typeP):
     events = ProductionPlan.objects.filter(
-        date_created=date, typeP=TypePlaning.objects.get(typeP=typeP))
+        date_created=date, typeP=TypePlaning.objects.get(typeP=typeP.lower()))
     print("events", events)
     event_arr = []
     for i in events:
