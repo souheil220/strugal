@@ -10,4 +10,5 @@ urlpatterns = [
     path("rapport/<str:typeR>/<str:dateC>", views.rapportJ, name="rapportJ"),
     path("saveRapport/<str:typeR>", views.saveRapport, name="saveRapport"),
     path("updateObjectif", views.update_obj, name="updateObjectif"),
+    path("donnerPermission", views.donner_permission, name="donnerPermission"),
 ]

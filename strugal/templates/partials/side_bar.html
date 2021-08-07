@@ -195,7 +195,7 @@
               </div>
             </li>
 
-             <!-- RapportJ  -->
+             <!-- Update Objectif  -->
 
              {% with request.resolver_match.url_name as url_name %} 
              <li {% if url_name == 'updateObjectif' %}class="active"{% endif %}>
@@ -208,6 +208,20 @@
                </a>
              </li>
            {% endwith %}
+
+            <!-- Donner Permission  -->
+
+            {% with request.resolver_match.url_name as url_name %} 
+            <li {% if url_name == 'donnerPermission' %}class="active"{% endif %}>
+              {% now 'Y-m-d' as mnt %}
+              <a href='{% url "donnerPermission" %}'>
+                <i class="ti-agenda"></i>
+                <p>
+                 Donner Permission
+                </p>
+              </a>
+            </li>
+          {% endwith %}
           </ul>
         </div>
       </div>

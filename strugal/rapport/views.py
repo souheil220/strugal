@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from planing.models import *
+from django.contrib.auth.models import User
 import time
 from .models import *
 from django.db.models import Q
@@ -368,3 +369,17 @@ def update_obj(request):
     type_Planing = TypePlaning.objects.all()
     context = {"type_Planing": type_Planing}
     return render(request, 'rapport/update_objectif.html', context)
+
+
+def donner_permission(request):
+    if request.method == "POST":
+        ad2000 = request.POST['ad2000'].lower()
+        email = request.POST['email']
+        utilisateur = User.objects.create_user(
+            username=ad2000, email=email, password='Azerty@22')
+        utilisateur.save()
+
+    return render(
+        request,
+        'rapport/donner_permission.html',
+    )
