@@ -192,20 +192,20 @@
                </a>
              </li>
            {% endwith %}
-
             <!-- Donner Permission  -->
-
-            {% with request.resolver_match.url_name as url_name %} 
-            <li {% if url_name == 'donnerPermission' %}class="active"{% endif %}>
-              {% now 'Y-m-d' as mnt %}
-              <a href='{% url "donnerPermission" %}'>
-                <i class="ti-key"></i>
-                <p>
-                 Donner Permission
-                </p>
-              </a>
-            </li>
-          {% endwith %}
+            {% ifequal user.groups.all.0.name  'directeur' %}
+              {% with request.resolver_match.url_name as url_name %} 
+              <li {% if url_name == 'donnerPermission' %}class="active"{% endif %}>
+                <a href='{% url "donnerPermission" %}'>
+                  <i class="ti-key"></i>
+                  <p>
+                  Donner Permission
+                  </p>
+                </a>
+              </li>
+              {% endwith %}
+           {% endifequal  %}
+           
           </ul>
         </div>
       </div>
