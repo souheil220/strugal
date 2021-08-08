@@ -15,20 +15,20 @@
         {% with request.resolver_match.url_name as url_name %} 
             {% if url_name == 'anodisation' %}
             <a class="navbar-brand" href="{% url 'anodisation' %}"
-                >Calendar Anodisation</a
+                >Calendrier Anodisation</a
             >
             {% elif url_name == 'laquageBlanc' %}
             <a class="navbar-brand" href="{% url 'laquageBlanc' %}"
-                >Calendar Laquage Blanc</a
+                >Calendrier Laquage Blanc</a
             >
             {% elif url_name == 'laquageCouleur' %}
             <a class="navbar-brand" href="{% url 'laquageCouleur' %}"
-                >Calendar Laquage Couleur</a
+                >Calendrier Laquage Couleur</a
             >
             {% elif url_name == 'rpt' %}
-            <a class="navbar-brand" href="{% url 'rpt' %}">Calendar RPT</a>
+            <a class="navbar-brand" href="{% url 'rpt' %}">Calendrier RPT</a>
             {% elif url_name == 'planing' %}
-            <a class="navbar-brand" href="{% url 'planing' %}">Calendar Extrusion</a>
+            <a class="navbar-brand" href="{% url 'planing' %}">Calendrier Extrusion</a>
             {% endif %} 
         {% endwith %}
     </div>
