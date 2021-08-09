@@ -26,13 +26,15 @@ def connexion_ad2000(email_util, passw_util):
                 'name': Name,
                 'mail': mail,
                 'ad_2000': ad_2000,
-                'title': title,
-                "thumbnailPhoto": thumbnailPhoto
+                'title': title
             }
+            if thumbnailPhoto is None:
+                dict["thumbnailPhoto"] = ""
+            else:
+                dict["thumbnailPhoto"] = thumbnailPhoto
+                open(f"{image_path}/{ad_2000}.png",
+                     "wb").write(conn.entries[0].thumbnailPhoto.value)
             msg = dict
-            print("yooooooo", f"{image_path}/{ad_2000}.png")
-            open(f"{image_path}/{ad_2000}.png",
-                 "wb").write(conn.entries[0].thumbnailPhoto.value)
         else:
             msg = 'deco'
     except Exception as e:

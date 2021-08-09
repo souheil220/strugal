@@ -1,4 +1,5 @@
 {% load static %}
+{% load image_exists %}
 <div
         class="sidebar"
         data-background-color="brown"
@@ -25,7 +26,12 @@
           <div class="user">
             <div class="photo">
               <!-- <img src="{% static 'img/faces/face-2.jpg' %}" /> -->
-              <img src="/media/{{request.user}}.png"/>
+              {% if request.user|does_it_exist %}
+                <img src="/media/{{request.user}}.png"/>
+              {% else %}
+                <img src="/media/dafault_profile.png"> 
+              {% endif %}
+             
             </div>
             <div class="info">
               <a
